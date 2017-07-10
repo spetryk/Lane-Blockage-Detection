@@ -28,11 +28,10 @@ class Approach():
 
 class Movement():
 
-	def __init__(self, direction, greenTime, satVelocity, headway, detectors={}, approach=None):
+	def __init__(self, direction, greenTime, headway, detectors={}, approach=None):
 
 		self.direction = direction 		# 'Left', 'Through', or 'Right'
 		self.greenTime = greenTime		# Green time for this movement (assume left turns are all protected)
-		self.satVelocity = satVelocity  # saturation velocity, in mph
 		self.headway = headway
 		self.detectors = detectors		# Detectors with data for this movement (dictionary)
 		self.approach = approach        # Approach this movement is part of (Approach object)
@@ -40,13 +39,16 @@ class Movement():
 
 class Detector():
 
-	def __init__(self, externalID, category, length, movements={}):
+	def __init__(self, externalID, category, length, satVelocity, movements={}):
 
 		self.externalID = externalID
 		self.category = category			# 'Advanced' or 'Stopbar'
 		self.length = length				# Length, in feet
+		self.satVelocity = satVelocity		# saturation velocity, in mph
 		self.movements = movements  		# Movements detector covers	(dictionary)
 
 		self.flow = []
 		self.occupancy = []
+
+		self.criticalOccs = []				# Calculated critical occupancies (one for stopbar, two for advanced)
 
