@@ -1,11 +1,10 @@
 from classes import *
 import csv
 
-# Initialize setup for Aimsun testing network
+# ************* Initialize setup for Aimsun testing network **********************
 # Create relationships between Intersections, Approaches, Movements, and Detectors
 
 def initializeNetwork(detectorInfoFile):
-	# ********** Initialize network setup *****************
 
 	# Intersections
 	intersectionDict = {1000: Intersection(externalID = 1000, cycleTime = 90.0), 2000 : Intersection(externalID = 2000, cycleTime = 90.0)}
@@ -41,12 +40,13 @@ def initializeNetwork(detectorInfoFile):
 	with open(detectorInfoFile, 'rt') as detFile:
 		fileReader = csv.reader(detFile, delimiter = ',')
 		next(detFile) # Skip header row
+
 		for row in fileReader:
-			intrsct = int(row[0])			# Intersection detector is in
+			intrsct = int(row[0])		# External ID of intersection detector is in
 			sectID = int(row[1])		# Section detector is in
 			extID = int(row[2])			# Detector external ID
-			category = row[3]			# Advanced or stopbar
-			length = float(row[4])		# Length, in ft
+			category = row[3]			# 'Advanced' or 'Stopbar'
+			length = float(row[4])		# Length of detector, in ft
 
 			detectorDict[extID] = Detector(externalID=extID, category=category, length=length)
 
@@ -55,7 +55,10 @@ def initializeNetwork(detectorInfoFile):
 				# Add Detector object to correct place in network
 				intersectionDict[intrsct].approaches[sectID].movements[turn].detectors[extID] = detectorDict[extID]
 
-				# Set movement field of Detector to be able to traverse up network
+				# Set movement field of Detector to enable traversing up network
 				detectorDict[extID].movements[turn] = intersectionDict[intrsct].approaches[sectID].movements[turn]
+
+	# Return intersectionDict for forward references: Intersection -> Approach -> Movement -> Detector
+	# Return detectorDict for backward references: Detector -> Movement -> Approach -> Interesction
 
 	return intersectionDict, detectorDict
