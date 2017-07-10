@@ -12,6 +12,7 @@ def main():
 	# Outline Aimsun network: connections between intersections, approaches, movements, and detectors
 	intersectionDict, detectorDict = initializeNetwork(detectorInfoFile)
 
+	print(detectorDict[100002].category)
 	calculate_critical_occupancies(detectorDict[100002], 'Left')
 	print(detectorDict[100002].criticalOccs)
 
@@ -27,17 +28,21 @@ def calculate_critical_occupancies(detector, turn):
 	# Set variables needed in equation
 	L = vehLength			# feet
 	D = detector.length 	# feet
-	G = detector.movements[turn].greenTime 							# seconds
-	C = detector.movements[turn].approach.intersection.cycleTime    # seconds
-	h = detector.movements[turn].headway							# seconds
-	v_sat = detector.movements[turn].satVelocity 					# miles per hour
+	G = detector.movements[turn].greenTime 								# seconds
+	C = detector.movements[turn].approach.intersection.cycleTime    	# seconds
+	h = detector.movements[turn].headway								# seconds
+	v_sat_sb = detector.movements[turn].satVelocityStopbar 				# miles per hour
+	v_sat_adv = detector.movements[turn].satVelocityAdvanced 			# miles per hour
 
 	if detector.category == 'Advanced':
-		occ_crit = ((L+D) / (v_sat*5280*3600))  * (1.0/h) * (G/C)
-		detector.criticalOccs.append(occ_crit)
+		occ_crit_1 = ((L+D)*3600 / (v_sat_adv*5280))  * (1.0/h) * (G/C)
+		occ_crit_2 = ((L+D)*3600 / (v_sat_adv*5280))  * (1.0/h) * (G/C) + ((C-G)/C)
+		detector.criticalOccs = [occ_crit_1, occ_crit_2]
 
-	occ_crit = ((L+D) / (v_sat*5280*3600))  * (1.0/h) + ((C-G)/C)
-	detector.criticalOccs.append(occ_crit)
+	else:
+		# Stopbar detector, only one critical occupancy
+		occ_crit = ((L+D) / (v_sat_sb*5280*3600))  * (1.0/h) + ((C-G)/C)
+		detector.criticalOccs.append(occ_crit)
 
 
 

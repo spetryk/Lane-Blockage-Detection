@@ -20,18 +20,18 @@ def initializeNetwork(detectorInfoFile):
 
 
 	# Movements
-	intersectionDict['West'].approaches[828].movements = {'Left': Movement(direction='Left',greenTime=20.0,headway=2.3,approach=intersectionDict['West'].approaches[828]),
-													'Through': Movement(direction='Through',greenTime=50.0,headway=2.3,approach=intersectionDict['West'].approaches[828]),
-													 'Right': Movement(direction='Right',greenTime=20.0,headway=2.3,approach=intersectionDict['West'].approaches[828])}
-	intersectionDict['West'].approaches[825].movements = {'Left': Movement(direction='Left',greenTime=20.0,headway=2.3,approach=intersectionDict['West'].approaches[825]),
-													'Through': Movement(direction='Through',greenTime=50.0,headway=2.3,approach=intersectionDict['West'].approaches[825]),
-													 'Right': Movement(direction='Right',greenTime=20.0,headway=2.3,approach=intersectionDict['West'].approaches[825])}
-	intersectionDict['East'].approaches[826].movements = {'Left': Movement(direction='Left',greenTime=20.0,headway=2.3,approach=intersectionDict['East'].approaches[826]),
-													'Through': Movement(direction='Through',greenTime=50.0,headway=2.3,approach=intersectionDict['East'].approaches[826]),
-													 'Right': Movement(direction='Right',greenTime=20.0,headway=2.3,approach=intersectionDict['East'].approaches[826])}
-	intersectionDict['East'].approaches[818].movements = {'Left': Movement(direction='Left',greenTime=20.0,headway=2.3,approach=intersectionDict['East'].approaches[818]),
-													'Through': Movement(direction='Through',greenTime=50.0,headway=2.3,approach=intersectionDict['East'].approaches[818]),
-													 'Right': Movement(direction='Right',greenTime=20.0,headway=2.3,approach=intersectionDict['East'].approaches[818])}
+	intersectionDict['West'].approaches[828].movements = {'Left': Movement(direction='Left',greenTime=20.0,satVelocityStopbar=20.0,satVelocityAdvanced=30,headway=2.3,approach=intersectionDict['West'].approaches[828]),
+													'Through': Movement(direction='Through',greenTime=50.0,satVelocityStopbar=25.0,satVelocityAdvanced=30,headway=2.3,approach=intersectionDict['West'].approaches[828]),
+													 'Right': Movement(direction='Right',greenTime=20.0,satVelocityStopbar=20.0,satVelocityAdvanced=30,headway=2.3,approach=intersectionDict['West'].approaches[828])}
+	intersectionDict['West'].approaches[825].movements = {'Left': Movement(direction='Left',greenTime=20.0,satVelocityStopbar=20.0,satVelocityAdvanced=30,headway=2.3,approach=intersectionDict['West'].approaches[825]),
+													'Through': Movement(direction='Through',greenTime=50.0,satVelocityStopbar=25.0,satVelocityAdvanced=30,headway=2.3,approach=intersectionDict['West'].approaches[825]),
+													 'Right': Movement(direction='Right',greenTime=20.0,satVelocityStopbar=20.0,satVelocityAdvanced=30,headway=2.3,approach=intersectionDict['West'].approaches[825])}
+	intersectionDict['East'].approaches[826].movements = {'Left': Movement(direction='Left',greenTime=20.0,satVelocityStopbar=20.0,satVelocityAdvanced=30,headway=2.3,approach=intersectionDict['East'].approaches[826]),
+													'Through': Movement(direction='Through',greenTime=50.0,satVelocityStopbar=25.0,satVelocityAdvanced=30,headway=2.3,approach=intersectionDict['East'].approaches[826]),
+													 'Right': Movement(direction='Right',greenTime=20.0,satVelocityStopbar=20.0,satVelocityAdvanced=30,headway=2.3,approach=intersectionDict['East'].approaches[826])}
+	intersectionDict['East'].approaches[818].movements = {'Left': Movement(direction='Left',greenTime=20.0,satVelocityStopbar=20.0,satVelocityAdvanced=30,headway=2.3,approach=intersectionDict['East'].approaches[818]),
+													'Through': Movement(direction='Through',greenTime=50.0,satVelocityStopbar=25.0,satVelocityAdvanced=30,headway=2.3,approach=intersectionDict['East'].approaches[818]),
+													 'Right': Movement(direction='Right',greenTime=20.0,satVelocityStopbar=20.0,satVelocityAdvanced=30,headway=2.3,approach=intersectionDict['East'].approaches[818])}
 
 	# Detectors
 
@@ -47,11 +47,10 @@ def initializeNetwork(detectorInfoFile):
 			extID = int(row[2])			# Detector external ID
 			category = row[3]			# Advanced or stopbar
 			length = float(row[4])		# Length, in ft
-			satVelocity = float(row[5]) # Saturation velocity, in miles per hour
 
-			detectorDict[extID] = Detector(externalID=extID, category=category, length=length, satVelocity = satVelocity)
+			detectorDict[extID] = Detector(externalID=extID, category=category, length=length)
 
-			movements = row[6].split(',')	# Any combination of: [Left, Through, Right]
+			movements = row[5].split(',')	# Any combination of: [Left, Through, Right]
 			for turn in movements:
 				# Add Detector object to correct place in network
 				intersectionDict[intrsct].approaches[sectID].movements[turn].detectors[extID] = detectorDict[extID]
