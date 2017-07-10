@@ -1,25 +1,28 @@
-from classes import *
-import csv
 
-# ********** Initialize network setup *****************
-# Initialize network from bottom up: Detectors -> Movements -> Approaches -> Intersections
+from network_setup_hardcode import *
 
 
-# Detectors
-detectorInfoFile = 'detectorInfoFile.csv'
-detectorDict = {}
+vehLength = 15.0 	# Average length of vehicle
 
-with open(detectorInfoFile, 'rt') as detFile:
-	fileReader = csv.reader(detFile)
-	for row in fileReader:
-		extID = row([0])
-		category = row([1])
-		length = row([2])
-
-		detectorDict[extID] = Detector(externalID=extID, category=category, length=length)
+def main():
+	
+	initializeNetwork()		# Outline Aimsun network: connections between intersections, approaches, movements, and detectors
 
 
-print(detectorDict)
 
-# Intersections
-West = Intersection(externalID = 1000, cycleTime = 90)
+def estimateState(detector, turn):
+	# detector: Detector object
+	# turn: 'Left', 'Through', or 'Right'
+
+	global vehLength
+
+	# Calculate critical occupancy
+	L = vehLength
+	D = detector.length
+	G = detector.movements[turn].greenTime
+	C = detector.movements[turn].approach.intersection.cycleTime
+	h = 5
+
+
+if __name__ == '__main__':
+	main()

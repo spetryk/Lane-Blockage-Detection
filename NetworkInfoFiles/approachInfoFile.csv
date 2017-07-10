@@ -1,0 +1,5 @@
+SectionID,Intersection,"Left (green,v_sat)","Through(green,v_sat)","Right (green,v_sat)"
+828,West,"Left,20,20","Through,50,30","Right,20,25"
+825,West,"Left,20,20","Through,50,30","Right,20,25"
+826,East,"Left,20,20","Through,50,30","Right,20,25"
+818,East,"Left,20,20","Through,50,30","Right,20,25"
