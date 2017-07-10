@@ -1,2 +1,21 @@
-ExternalID,Category,Length,"Left,green,v_sat","Through,green,v_sat","Right,green,v_sat"
-1,Stopbar,50,"Left,20,20","Through,50,30","Right,20,25"
+Intersection Name,SectionID,ExternalID,Category,Length,Movements
+1000,828,100001,Advanced,5.9,"Left,Through,Right"
+1000,828,100002,Advanced,5.9,"Left,Through,Right"
+1000,828,100003,Stopbar,22.4,Right
+1000,828,100004,Stopbar,22.4,Through
+1000,828,100005,Stopbar,38.2,Left
+1000,825,100006,Advanced,5.9,"Left,Through,Right"
+1000,825,100007,Advanced,5.9,"Left,Through,Right"
+1000,825,100010,Stopbar,22.4,"Through,Right"
+1000,825,100009,Stopbar,22.4,Through
+1000,825,100008,Stopbar,38.2,Left
+2000,826,200011,Advanced,5.9,"Left,Through,Right"
+2000,826,200012,Advanced,5.9,"Left,Through,Right"
+2000,826,200013,Stopbar,22.4,Right
+2000,826,200014,Stopbar,22.4,Through
+2000,826,200015,Stopbar,22.4,Through
+2000,826,200016,Stopbar,38.2,Left
+2000,818,200017,Advanced,22.4,"Left,Through,Right"
+2000,818,200018,Advanced,22.4,"Left,Through,Right"
+2000,818,200019,Stopbar,22.4,"Through,Right"
+2000,818,200020,Stopbar,38.2,"Through,Left"
