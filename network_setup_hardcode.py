@@ -13,24 +13,22 @@ def initializeNetwork(detectorInfoFile):
 	intersectionDict[1000].approaches[828] = Approach(sectionID=828, intersection=intersectionDict[1000])
 	intersectionDict[1000].approaches[825] = Approach(sectionID=825, intersection=intersectionDict[1000])
 
-	intersectionDict[2000].approaches = {} # Bug: 1000's approaches were being applied to 2000's as well, so clear 2000 before assigning
 	intersectionDict[2000].approaches[826] = Approach(sectionID=826, intersection=intersectionDict[2000])
 	intersectionDict[2000].approaches[818] = Approach(sectionID=818, intersection=intersectionDict[2000])
 
-
 	# Movements
-	intersectionDict[1000].approaches[828].movements = {'Left': Movement(direction='Left',greenTime=20.0,satVelocityStopbar=20.0,satVelocityAdvanced=30,headway=2.3,approach=intersectionDict[1000].approaches[828]),
-													'Through': Movement(direction='Through',greenTime=50.0,satVelocityStopbar=25.0,satVelocityAdvanced=30,headway=2.3,approach=intersectionDict[1000].approaches[828]),
-													 'Right': Movement(direction='Right',greenTime=20.0,satVelocityStopbar=20.0,satVelocityAdvanced=30,headway=2.3,approach=intersectionDict[1000].approaches[828])}
-	intersectionDict[1000].approaches[825].movements = {'Left': Movement(direction='Left',greenTime=20.0,satVelocityStopbar=20.0,satVelocityAdvanced=30,headway=2.3,approach=intersectionDict[1000].approaches[825]),
-													'Through': Movement(direction='Through',greenTime=50.0,satVelocityStopbar=25.0,satVelocityAdvanced=30,headway=2.3,approach=intersectionDict[1000].approaches[825]),
-													 'Right': Movement(direction='Right',greenTime=20.0,satVelocityStopbar=20.0,satVelocityAdvanced=30,headway=2.3,approach=intersectionDict[1000].approaches[825])}
-	intersectionDict[2000].approaches[826].movements = {'Left': Movement(direction='Left',greenTime=20.0,satVelocityStopbar=20.0,satVelocityAdvanced=30,headway=2.3,approach=intersectionDict[2000].approaches[826]),
-													'Through': Movement(direction='Through',greenTime=50.0,satVelocityStopbar=25.0,satVelocityAdvanced=30,headway=2.3,approach=intersectionDict[2000].approaches[826]),
-													 'Right': Movement(direction='Right',greenTime=20.0,satVelocityStopbar=20.0,satVelocityAdvanced=30,headway=2.3,approach=intersectionDict[2000].approaches[826])}
-	intersectionDict[2000].approaches[818].movements = {'Left': Movement(direction='Left',greenTime=20.0,satVelocityStopbar=20.0,satVelocityAdvanced=30,headway=2.3,approach=intersectionDict[2000].approaches[818]),
-													'Through': Movement(direction='Through',greenTime=50.0,satVelocityStopbar=25.0,satVelocityAdvanced=30,headway=2.3,approach=intersectionDict[2000].approaches[818]),
-													 'Right': Movement(direction='Right',greenTime=20.0,satVelocityStopbar=20.0,satVelocityAdvanced=30,headway=2.3,approach=intersectionDict[2000].approaches[818])}
+	intersectionDict[1000].approaches[828].movements = {'Left': Movement(direction='Left',greenTime=30.0,satVelocityStopbar=20.0,satVelocityAdvanced=30,headway=2.3,numUpLanes=2,numDownLanes=1,approach=intersectionDict[1000].approaches[828]),
+													'Through': Movement(direction='Through',greenTime=30.0,satVelocityStopbar=25.0,satVelocityAdvanced=30,headway=2.3,numUpLanes=2,numDownLanes=2,approach=intersectionDict[1000].approaches[828]),
+													 'Right': Movement(direction='Right',greenTime=30.0,satVelocityStopbar=20.0,satVelocityAdvanced=30,headway=2.3,numUpLanes=2,numDownLanes=1,approach=intersectionDict[1000].approaches[828])}
+	intersectionDict[1000].approaches[825].movements = {'Left': Movement(direction='Left',greenTime=30.0,satVelocityStopbar=20.0,satVelocityAdvanced=30,headway=2.3,numUpLanes=2,numDownLanes=1,approach=intersectionDict[1000].approaches[825]),
+													'Through': Movement(direction='Through',greenTime=30.0,satVelocityStopbar=25.0,satVelocityAdvanced=30,headway=2.3,numUpLanes=2,numDownLanes=2,approach=intersectionDict[1000].approaches[825]),
+													 'Right': Movement(direction='Right',greenTime=30.0,satVelocityStopbar=20.0,satVelocityAdvanced=30,headway=2.3,numUpLanes=2,numDownLanes=1,approach=intersectionDict[1000].approaches[825])}
+	intersectionDict[2000].approaches[826].movements = {'Left': Movement(direction='Left',greenTime=20.0,satVelocityStopbar=20.0,satVelocityAdvanced=30,headway=2.3,numUpLanes=2,numDownLanes=1,approach=intersectionDict[2000].approaches[826]),
+													'Through': Movement(direction='Through',greenTime=20.0,satVelocityStopbar=25.0,satVelocityAdvanced=30,headway=2.3,numUpLanes=2,numDownLanes=2,approach=intersectionDict[2000].approaches[826]),
+													 'Right': Movement(direction='Right',greenTime=20.0,satVelocityStopbar=20.0,satVelocityAdvanced=30,headway=2.3,numUpLanes=2,numDownLanes=1,approach=intersectionDict[2000].approaches[826])}
+	intersectionDict[2000].approaches[818].movements = {'Left': Movement(direction='Left',greenTime=30.0,satVelocityStopbar=20.0,satVelocityAdvanced=30,headway=2.3,numUpLanes=2,numDownLanes=1,approach=intersectionDict[2000].approaches[818]),
+													'Through': Movement(direction='Through',greenTime=30.0,satVelocityStopbar=25.0,satVelocityAdvanced=30,headway=2.3,numUpLanes=2,numDownLanes=2,approach=intersectionDict[2000].approaches[818]),
+													 'Right': Movement(direction='Right',greenTime=30.0,satVelocityStopbar=20.0,satVelocityAdvanced=30,headway=2.3,numUpLanes=2,numDownLanes=1,approach=intersectionDict[2000].approaches[818])}
 
 	# Detectors
 
@@ -50,8 +48,8 @@ def initializeNetwork(detectorInfoFile):
 
 			detectorDict[extID] = Detector(externalID=extID, category=category, length=length)
 
-			movements = row[5].split(',')	# Any combination of: [Left, Through, Right]
-			for turn in movements:
+			moves = row[5].split(',')	# Any combination of: [Left, Through, Right]
+			for turn in moves:
 				# Add Detector object to correct place in network
 				intersectionDict[intrsct].approaches[sectID].movements[turn].detectors[extID] = detectorDict[extID]
 
