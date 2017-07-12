@@ -1,7 +1,7 @@
 Intersection Name,SectionID,ExternalID,Category,Length,Movements
 1000,828,100001,Advanced,5.9,"Left,Through,Right"
 1000,828,100002,Advanced,5.9,"Left,Through,Right"
-1000,828,100003,Stopbar,22.4,Right
+1000,828,100003,Stopbar,22.4,"Through,Right"
 1000,828,100004,Stopbar,22.4,Through
 1000,828,100005,Stopbar,38.2,Left
 1000,825,100006,Advanced,5.9,"Left,Through,Right"
@@ -15,7 +15,7 @@ Intersection Name,SectionID,ExternalID,Category,Length,Movements
 2000,826,200014,Stopbar,22.4,Through
 2000,826,200015,Stopbar,22.4,Through
 2000,826,200016,Stopbar,38.2,Left
-2000,818,200017,Advanced,22.4,"Left,Through,Right"
-2000,818,200018,Advanced,22.4,"Left,Through,Right"
+2000,818,200017,Advanced,5.9,"Left,Through,Right"
+2000,818,200018,Advanced,5.9,"Left,Through,Right"
 2000,818,200019,Stopbar,22.4,"Through,Right"
-2000,818,200020,Stopbar,38.2,"Through,Left"
+2000,818,200020,Stopbar,22.4,"Through,Left"

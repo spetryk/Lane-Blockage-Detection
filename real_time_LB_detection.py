@@ -1,4 +1,7 @@
 
+# ******************************
+# Not finished! Script can monitor directory for new file, read in lines as they appear in the file,
+# but not add to dictionary in real time yet
 from network_setup_hardcode import *
 import numpy as np
 import pandas as pd
@@ -6,12 +9,12 @@ import os
 import csv
 import time
 
-vehLength = 17.0 	# Average length of vehicle, in feet
+vehLength = 15.5 	# Average length of vehicle, in feet
 detectorInfoFile = 'NetworkInfoFiles/detectorInfoFile.csv'
 detectorDataFilePath = 'C:/Users/suzep/Dropbox/Aimsun_calibration/Model/sim_output/'
-data = 'C:/Users/suzep/Dropbox/Aimsun_calibration/Model/sim_output/DetectorData_2017-07-10 132656.csv'
+#data = 'C:/Users/suzep/Dropbox/Aimsun_calibration/Model/sim_output/DetectorData_2017-07-10 132656.csv'
 #data = 'C:/Users/suzep/Dropbox/Aimsun_calibration/Model/sim_output/DetectorData_2017-07-10 132656_some_adv.csv' # Removed detectors 1, 2, 17, 18
-#data = 'C:/Users/suzep/Dropbox/Aimsun_calibration/Model/sim_output/DetectorData_2017-07-10 132656_some_sb.csv'	# Removed  detectors 13, 14, 15, 16
+data = 'C:/Users/suzep/Dropbox/Aimsun_calibration/Model/sim_output/DetectorData_2017-07-10 132656_some_sb.csv'	# Removed  detectors 13, 14, 15, 16
 #data = 'C:/Users/suzep/Dropbox/Aimsun_calibration/Model/sim_output/DetectorData_2017-07-10 132656_no_adv.csv'	# Removed all advanced detectors
 
 # Outline Aimsun network: connections between intersections, approaches, movements, and detectors
@@ -30,6 +33,20 @@ def main():
 	global detectorDict
 
 
+	# At each time step:
+	
+	# Add flow and occupancy data to correct detectors
+	# Get line from csv detector file
+
+	watch = False		# Set watch to True if you want to look for new files
+	newFile = None
+	if watch:
+		newFile = get_new_file(detectorDataFilePath)
+	
+	if bool(newFile):
+		# Monitor current simulation's data
+		read_data_realtime(newFile) # <--In here: option to search in real time
+
 # ********** Get lane blockage detection working for completed simulation first (not real time) ********************
 	times = read_completed_file(data, detectorDict)
 
@@ -47,7 +64,6 @@ def main():
 
 	LB_DataFrame = pd.DataFrame(LB_Conclusions)
 	LB_table = LB_DataFrame.pivot(index='Time',columns='SectionID',values='Conclusion')
-	LB_table.to_csv('LB Conclusions.csv')
 	print(LB_table)
 
 
@@ -76,9 +92,49 @@ def read_completed_file(detectorDataFile, detectorDict):
 
 	return np.unique(times)
 
-def calculate_critical_occupancies(detector, turn, debug):
-	# Calculate critical occupancies for detector: two thresholds for advanced, one threshold for stopbar
-	# Returns first critical occupancy only (second one for advanced detectors not needed in algorithm)
+def get_new_file(directory):
+	# Watch directory for new detector data file (appears when simulation starts)
+	# Returns path to file that just appeared
+	
+	before = dict([(file, None) for file in os.listdir(directory)])	 # Find files already in directory
+
+	while True:
+		time.sleep(10)
+		# Find differences in directory before and after time step
+		after = dict([(file, None) for file in os.listdir(directory)])
+
+		new = {newFile : after[newFile] for newFile in set(after)-set(before)}	
+		if len(new) > 1:
+			raise Exception('More than one new data file appeared')				# Only handle one new file per time step
+
+		if bool(new):
+			# New file appeared (dictionary is not empty)
+			data = next(iter(new.keys()))	# Name of new data file 
+			return directory + data
+
+		before = after
+
+def read_data_realtime(detectorDataFile):
+	# Read detector data from Aimsun simulation as they appear
+	# detectorDataFile: .csv file (full path)
+
+	with open(detectorDataFile, 'r') as dataFile:
+		fileReader = csv.reader(dataFile, delimiter=',')
+		dataFile.seek(0,2) 		# Go to end of file
+		
+		while True:
+			row = dataFile.readline()	# Check if there's a new line to read
+			if not row:
+				time.sleep(0.1) 	# Stop looking briefly
+				continue
+			print(row)
+			
+
+		#next(dataFile)	# Skip header row
+
+def calculate_critical_occupancies(detector, turn):
+	# Set critical occupancies for detector: two thresholds for advanced, one threshold for stopbar
+	# Returns first critical occupancy only (second one not needed in algorithm)
 
 	# detector: Detector object
 	# turn: 'Left', 'Through', or 'Right'
@@ -87,12 +143,12 @@ def calculate_critical_occupancies(detector, turn, debug):
 
 	# Set variables needed in equation
 	L = float(vehLength)			# feet
-	D = float(detector.length) 		# feet
-	G = float(detector.movements[turn].greenTime) 							# seconds
+	D = float(detector.length) 	# feet
+	G = float(detector.movements[turn].greenTime) 								# seconds
 	C = float(detector.movements[turn].approach.intersection.cycleTime)    	# seconds
 	h = float(detector.movements[turn].headway)								# seconds
-	v_sat_sb = float(detector.movements[turn].satVelocityStopbar) 			# miles per hour
-	v_sat_adv = float(detector.movements[turn].satVelocityAdvanced) 		# miles per hour
+	v_sat_sb = float(detector.movements[turn].satVelocityStopbar) 				# miles per hour
+	v_sat_adv = float(detector.movements[turn].satVelocityAdvanced) 			# miles per hour
 
 	if detector.category == 'Advanced':
 		# Two critical occupancies, but only need the first one
@@ -101,11 +157,9 @@ def calculate_critical_occupancies(detector, turn, debug):
 
 	else:
 		# Stopbar detector, only one critical occupancy
+		occ_crit = ((L+D)*3600.0 / (v_sat_sb*5280.0))  * (1.0/h) + ((C-G)/C)
 
-		occ_crit = ((L+D)*3600.0 / (v_sat_sb*5280.0))  * (1.0/h) * (G/C) + ((C-G)/C)
-		print('occ_crit: ', occ_crit) if debug else None # **********************************************************
-
-	return occ_crit*100
+	return occ_crit
  	
 		# mvmt: Movement object
 		# curr_time: current time (int)
@@ -113,7 +167,7 @@ def calculate_critical_occupancies(detector, turn, debug):
 
 	# Returns array of states (e.g. ['Uncongested', 'Congested']), or None if there was insufficient data
 
-
+	global intersectionDict
 def estimate_movement_state(mvmt, curr_time, debug, category):
 	# Estimate traffic state of movement's detectors at given time
 	global detectorDict
@@ -122,43 +176,38 @@ def estimate_movement_state(mvmt, curr_time, debug, category):
 	states = []
 
 	for det in mvmt.detectors.values():	
-		#debug = det.externalID==100003  and direction=='Right'
-		print('det.extID: ',det.externalID) if debug else None # **********************************************************
 		# Determine state for all detectors in this category with information for this movement
 		if det.category == category:
 			print('det.category: ',det.category) if debug else None # **********************************************************
-
 			try:
 				index = np.where(det.time == curr_time)[0][0]		# Find index in detector's occupancy array that corresponds to the current time
 			except IndexError:
 				# No data at this time step for this detector
+				print('IndexError, time: ',curr_time,' det.time: ',det.time) if debug else None # **********************************************************
 				#print('Missing data for ' + category + ' ' + mvmt.direction + ' turn of section ' + str(mvmt.approach.sectionID))
 				return None
 
 			curr_occ = det.occupancy[index]							# Current occupancy
-			critical_occ = calculate_critical_occupancies(det, mvmt.direction, debug)
-			print('curr_occ: ', curr_occ) if debug else None # **********************************************************
-			print('critical_occ: ', critical_occ) if debug else None # **********************************************************
+			first_occ_crit = calculate_critical_occupancies(det, mvmt.direction)	
 
-			if curr_occ < critical_occ:
+			#first_occ_crit = det.criticalOccs[0]					# First critical occupancy (separates uncongested & spillback for stopbar, 
+																	#   						uncongested & congested for advanced)
+			if curr_occ < first_occ_crit:
 				states.append('Uncongested')
 			elif category == 'Advanced':
-				# Advanced detector, curr_occ >= critical_occ
+				# Advanced detector, avg_occ >= avg_occ_crit
 				states.append('Congested')
 			else:
-				# Stopbar detector, curr_occ >= critical_occ
-				print('det.category: ',det.category) if debug else None # **********************************************************
+				# Stopbar detector, avg_occ >= avg_occ_crit
 				states.append('Queue Spillback')
-
-			print('states: ',states) if debug else None	# **********************************************************
 
 	# Check how many lanes the detectors need to cover for this movement
 	numLanes = mvmt.numUpLanes if category=='Advanced' else mvmt.numDownLanes
 
 	if len(states) < numLanes:
 		# Not enough detectors in this category for full coverage of this movement
-		# print('Not enough ' + category + ' detectors for ' + mvmt.direction + ' turn of section ' + str(mvmt.approach.sectionID))
-		print('Not enough lanes, numLanes: ',dict_adv_states) if debug else None # **********************************************************
+		#print('Not enough ' + category + ' detectors for ' + mvmt.direction + ' turn of section ' + str(mvmt.approach.sectionID))
+		#bprint('Not enough lanes, numLanes: ',dict_adv_states) if debug else None # **********************************************************
 		return None
 	else:
 		return states
@@ -170,7 +219,7 @@ def make_LB_conclusion(timeStep, intrsct, app):
 	global intersectionDict
 	global detectorDict
 
-	debug = 0
+	debug = app.sectionID==828
 
 	# Initialize dictionaries for advanced and stopbar states: {turn: states}
 	dict_adv_states = {'Left':None, 'Through':None, 'Right':None}
@@ -178,7 +227,7 @@ def make_LB_conclusion(timeStep, intrsct, app):
 
 	# Check advanced detectors: if any do not have information, conclude 'No Information'
 	for mvmt in app.movements.values():
-		print('Movement: ',mvmt, 'Turn: ', mvmt.direction) if debug else None # **********************************************************
+		print('Movement: ',mvmt) if debug else None # **********************************************************
 		adv_states = estimate_movement_state(mvmt, timeStep, debug, category='Advanced')
 		print('adv_states: ', adv_states) if debug else None # ******************************************************
 		if adv_states == None:
@@ -202,7 +251,7 @@ def make_LB_conclusion(timeStep, intrsct, app):
 	else:
 		# Check stopbar detectors
 		for mvmt in app.movements.values():
-			print('Stopbar turn of mvmt: ',mvmt.direction) if debug else None # **********************************************************
+			print('turn of mvmt: ',mvmt.direction) if debug else None # **********************************************************
 			sb_states = estimate_movement_state(mvmt, timeStep, debug, category='Stopbar')
 			dict_sb_states[mvmt.direction] = sb_states
 
@@ -219,6 +268,7 @@ def make_LB_conclusion(timeStep, intrsct, app):
 
 	# Check if any stopbar detectors had queue spillback
 	spillback_movements = []
+
 	for turn in dict_sb_states.keys():
 		if dict_sb_states[turn] is not None and any(state=='Queue Spillback' for state in dict_sb_states[turn]):
 			# Movement had queue spillback
@@ -228,14 +278,6 @@ def make_LB_conclusion(timeStep, intrsct, app):
 		LB_Conclusions['Conclusion'].append('Lane Blockage by Queue Spillback from ' + ' '.join(spillback_movements) + ' Movements')
 		LB_Conclusions['Time'].append(timeStep)
 		LB_Conclusions['SectionID'].append(app.sectionID)
-		return
-
-	# Check how many movements have data
-	numMoves = 0
-	for turn_state in dict_sb_states.values():
-		print(turn_state)
-
-
 			
 
 if __name__ == '__main__':
