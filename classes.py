@@ -66,6 +66,6 @@ class Detector():
 		self.occupancy = []					# Occupancy (percent)
 		self.time = []
 
-		#self.criticalOccs = []				# Calculated critical occupancies (one for stopbar, two for advanced)
+		self.criticalOccs = []				# Calculated critical occupancies (one for stopbar, two for advanced)
 		self.curr_state = None				# Current traffic state ('Uncongested' or 'Queue Spillback' for stopbar,
 											#					     'Uncongested' or 'Congested' for advanced)
