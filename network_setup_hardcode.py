@@ -53,12 +53,12 @@ def initializeNetwork(detectorInfoFile):
 		intersectionDict[1000].approaches[825].movements = {'Left': Movement(direction='Left',greenTime=24.0,satVelocityStopbar=20.0,satVelocityAdvanced=30,headway=2.0,numUpLanes=2,numDownLanes=1,approach=intersectionDict[1000].approaches[825]),
 														'Through': Movement(direction='Through',greenTime=10.0,satVelocityStopbar=20.0,satVelocityAdvanced=30,headway=2.0,numUpLanes=2,numDownLanes=2,approach=intersectionDict[1000].approaches[825]),
 														 'Right': Movement(direction='Right',greenTime=10.0,satVelocityStopbar=20.0,satVelocityAdvanced=30,headway=2.0,numUpLanes=2,numDownLanes=1,approach=intersectionDict[1000].approaches[825])}
-		intersectionDict[2000].approaches[826].movements = {'Left': Movement(direction='Left',greenTime=19.0,satVelocityStopbar=20.0,satVelocityAdvanced=30,headway=2.0,numUpLanes=2,numDownLanes=1,approach=intersectionDict[2000].approaches[826]),
+		intersectionDict[2000].approaches[826].movements = {'Left': Movement(direction='Left',greenTime=23.0,satVelocityStopbar=20.0,satVelocityAdvanced=30,headway=2.0,numUpLanes=2,numDownLanes=1,approach=intersectionDict[2000].approaches[826]),
 														'Through': Movement(direction='Through',greenTime=15.0,satVelocityStopbar=20.0,satVelocityAdvanced=30,headway=2.0,numUpLanes=2,numDownLanes=2,approach=intersectionDict[2000].approaches[826]),
 														 'Right': Movement(direction='Right',greenTime=15.0,satVelocityStopbar=20.0,satVelocityAdvanced=30,headway=2.0,numUpLanes=2,numDownLanes=1,approach=intersectionDict[2000].approaches[826])}
 		intersectionDict[2000].approaches[818].movements = {'Left': Movement(direction='Left',greenTime=29.0,satVelocityStopbar=20.0,satVelocityAdvanced=30,headway=2.0,numUpLanes=2,numDownLanes=1,approach=intersectionDict[2000].approaches[818]),
-														'Through': Movement(direction='Through',greenTime=15.0,satVelocityStopbar=20.0,satVelocityAdvanced=30,headway=2.0,numUpLanes=2,numDownLanes=2,approach=intersectionDict[2000].approaches[818]),
-														 'Right': Movement(direction='Right',greenTime=15.0,satVelocityStopbar=20.0,satVelocityAdvanced=30,headway=2.0,numUpLanes=2,numDownLanes=1,approach=intersectionDict[2000].approaches[818])}
+														'Through': Movement(direction='Through',greenTime=11.0,satVelocityStopbar=20.0,satVelocityAdvanced=30,headway=2.0,numUpLanes=2,numDownLanes=2,approach=intersectionDict[2000].approaches[818]),
+														 'Right': Movement(direction='Right',greenTime=11.0,satVelocityStopbar=20.0,satVelocityAdvanced=30,headway=2.0,numUpLanes=2,numDownLanes=1,approach=intersectionDict[2000].approaches[818])}
 
 
 	# Detectors

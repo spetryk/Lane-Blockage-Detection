@@ -7,6 +7,7 @@ import csv
 import time
 
 vehLength = 17.0 	# Average length of vehicle, in feet
+clearance = 9.10	# Average distance between stopped vehicles, in feet
 detectorInfoFile = 'NetworkInfoFiles/detectorInfoFile.csv'
 detectorDataFilePath = 'C:/Users/suzep/Dropbox/Aimsun_calibration/Model/sim_output/'
 
@@ -19,7 +20,10 @@ detectorDataFilePath = 'C:/Users/suzep/Dropbox/Aimsun_calibration/Model/sim_outp
 #data = 'C:/Users/suzep/Dropbox/Aimsun_calibration/Model/sim_output/DetectorData_2017-07-10 132656_no_adv.csv'	# Removed all advanced detectors
 
 # Data from LB Test #4 (LT blockage on Section 826)
-data = 'C:/Users/suzep/Dropbox/Aimsun_calibration/Model/sim_output/DetectorData_2017-07-13 160215.csv'
+#data = 'C:/Users/suzep/Dropbox/Aimsun_calibration/Model/sim_output/DetectorData_2017-07-13 160215.csv'
+#data = 'C:/Users/suzep/Dropbox/Aimsun_calibration/Model/sim_output/DetectorData_2017-07-14 115950.csv'	# Trial run: constant demand
+#data = 'C:/Users/suzep/Dropbox/Aimsun_calibration/Model/sim_output/DetectorData_2017-07-14 124533.csv'	# Det. 16 is 22 ft
+data = 'C:/Users/suzep/Dropbox/Aimsun_calibration/Model/sim_output/DetectorData_2017-07-14 132502.csv'	# Clearance is 7.10 ft instead of 9.10
 
 
 # Outline Aimsun network: connections between intersections, approaches, movements, and detectors
@@ -225,10 +229,12 @@ def calculate_critical_occupancies(detector, turn):
 	# turn: 'Left', 'Through', or 'Right'
 
 	global vehLength
+	global clearance
 
 	# Set variables needed in equation
-	L = float(vehLength)			# feet
-	D = float(detector.length) 		# feet
+	
+	L = float(vehLength)							# feet
+	D = float(detector.length)				 		# feet
 	G = float(detector.movements[turn].greenTime) 							# seconds
 	C = float(detector.movements[turn].approach.intersection.cycleTime)    	# seconds
 	h = float(detector.movements[turn].headway)								# seconds
@@ -236,8 +242,13 @@ def calculate_critical_occupancies(detector, turn):
 	v_sat_adv = float(detector.movements[turn].satVelocityAdvanced) 		# miles per hour
 
 	if detector.category == 'Stopbar':
+		# If detector length is too long, raise critical occupancy to account for errors
+		error_correction = 1					# No errors accounted for
+		if D > (L+clearance):
+			error_correction = 1.05 			# Account for 5 % error
+
 		occ_crit = ((L+D)*3600.0 / (v_sat_sb*5280.0))  * (1.0/h) * (G/C) + ((C-G)/C)
-		occupancies = [occ_crit*100, None]
+		occupancies = [occ_crit*100*error_correction, None]
 		detector.criticalOccs = occupancies
 
 		return occupancies
@@ -262,7 +273,7 @@ def determine_type(app, curr_time):
 		if 'Queue Spillback' in mvmt_states:
 			return 'Lane Blockage'
 
-	# Otherwise: advanced detector(s) congested, so calculate average % congestion
+	# Otherwise: advanced detector(s) congested; find most congested detector and return its % congestion
 	percent_congestion = []
 	for mvmt in app.movements.values():
 		for det in mvmt.detectors.values():
@@ -275,9 +286,10 @@ def determine_type(app, curr_time):
 					curr_percent_congestion = [((curr_occ - det.criticalOccs[0]) / (det.criticalOccs[1]-det.criticalOccs[0])) * 100]
 					percent_congestion = percent_congestion + [curr_percent_congestion]
 
-	avg_percent_congestion = round(np.mean(percent_congestion), 2) # Get average, round to 2 decimal places
+	max_percent_congestion = round(max(percent_congestion)[0],2)	# Get % congestion from most congested detector, round to 2 decimal places
+	#avg_percent_congestion = round(np.mean(percent_congestion), 2) # Get average, round to 2 decimal places
 
-	return str(avg_percent_congestion) + ' % Congested'
+	return str(max_percent_congestion) + ' % Congested'
 
 
 def dist_to_sb(mvmt, curr_time):
