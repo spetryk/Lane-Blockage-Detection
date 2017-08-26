@@ -35,14 +35,14 @@ class Movement():
 
 	def __init__(self, direction, greenTime, satVelocityStopbar, satVelocityAdvanced, headway, numUpLanes, numDownLanes, detectors=None, approach=None):
 
-		self.direction = direction 		# 'Left', 'Through', or 'Right'
-		self.greenTime = greenTime		# Green time for this movement, in seconds (assume left turns are all protected)
-		self.headway = headway			# Headway, in seconds
+		self.direction = direction 						# 'Left', 'Through', or 'Right'
+		self.greenTime = greenTime						# Green time for this movement, in seconds (assume left turns are all protected)
+		self.headway = headway							# Headway, in seconds
 		self.satVelocityStopbar = satVelocityStopbar	# Saturation velociy for stopbar movement, in miles per hour
 		self.satVelocityAdvanced = satVelocityAdvanced	# Saturation velocity for advanced movement, in miles per hour
-		self.numUpLanes = numUpLanes	# Number of upstream lanes for this movement (to be covered by advanced detectors)
-		self.numDownLanes = numDownLanes # Number of downstream lanes for this movement (to be covered by stopbar detectors)
-		self.approach = approach        # Approach this movement is part of (Approach object)
+		self.numUpLanes = numUpLanes					# Number of upstream lanes for this movement (to be covered by advanced detectors)
+		self.numDownLanes = numDownLanes 				# Number of downstream lanes for this movement (to be covered by stopbar detectors)
+		self.approach = approach        				# Approach this movement is part of (Approach object)
 
 		if detectors==None:
 			self.detectors={}
@@ -66,6 +66,8 @@ class Detector():
 		self.occupancy = []					# Occupancy (percent)
 		self.time = []
 
-		self.criticalOccs = []				# Calculated critical occupancies (one for stopbar, two for advanced)
-		self.curr_state = None				# Current traffic state ('Uncongested' or 'Queue Spillback' for stopbar,
-											#					     'Uncongested' or 'Congested' for advanced)
+		# Calculated critical occupancies for each turn covered by detector (one critical occ for stopbar, two for advanced)
+		self.criticalOccs = {'Left':None, 'Through':None, 'Right':None}		
+		
+		self.currentState = None			# Current traffic state ('Uncongested' or 'Queue Spillback' for stopbar,
+											# 'Uncongested', 'Congested', or 'Queue Spillback' for advanced)

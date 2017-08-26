@@ -6,24 +6,39 @@ import os
 import csv
 import time
 
-vehLength = 17.0 	# Average length of vehicle, in feet
-clearance = 9.10	# Average distance between stopped vehicles, in feet
+VEH_LENGTH = 17.0 	# Average length of vehicle, in feet
+CLEARANCE = 9.10	# Average distance between stopped vehicles, in feet
 detectorInfoFile = 'NetworkInfoFiles/detectorInfoFile.csv'
 detectorDataFilePath = 'C:/Users/suzep/Dropbox/Aimsun_calibration/Model/sim_output/'
 
 # Data from LB Test #1 (LT and RT blockages on Section 826)
-#data = 'C:/Users/suzep/Dropbox/Aimsun_calibration/Model/sim_output/DetectorData_2017-07-10 132656.csv'
-#data = 'C:/Users/suzep/Dropbox/Aimsun_calibration/Model/sim_output/DetectorData_2017-07-10 132656_some_adv.csv' # Removed detectors 1, 2, 17, 18
-#data = 'C:/Users/suzep/Dropbox/Aimsun_calibration/Model/sim_output/DetectorData_2017-07-10 132656_one_mvmt_missing.csv'	# Removed  detector 16
-#data = 'C:/Users/suzep/Dropbox/Aimsun_calibration/Model/sim_output/DetectorData_2017-07-10 132656_half_sb_at_one_app.csv'	# Removed  detectors 15, 16
-#data = 'C:/Users/suzep/Dropbox/Aimsun_calibration/Model/sim_output/DetectorData_2017-07-10 132656_some_sb.csv'	# Removed  detectors 13, 14, 15, 16
-#data = 'C:/Users/suzep/Dropbox/Aimsun_calibration/Model/sim_output/DetectorData_2017-07-10 132656_no_adv.csv'	# Removed all advanced detectors
+#data = detectorDataFilePath + 'DetectorData_2017-07-10 132656.csv'
+#data = detectorDataFilePath + 'DetectorData_2017-07-10 132656_some_adv.csv' # Removed detectors 1, 2, 17, 18
+#data = detectorDataFilePath + 'DetectorData_2017-07-10 132656_one_mvmt_missing.csv'	# Removed  detector 16
+#data = detectorDataFilePath + 'DetectorData_2017-07-10 132656_half_sb_at_one_app.csv'	# Removed  detectors 15, 16
+#data = detectorDataFilePath + 'DetectorData_2017-07-10 132656_some_sb.csv'	# Removed  detectors 13, 14, 15, 16
+#data = detectorDataFilePath + 'DetectorData_2017-07-10 132656_no_adv.csv'	# Removed all advanced detectors
 
 # Data from LB Test #4 (LT blockage on Section 826)
-#data = 'C:/Users/suzep/Dropbox/Aimsun_calibration/Model/sim_output/DetectorData_2017-07-13 160215.csv'
-#data = 'C:/Users/suzep/Dropbox/Aimsun_calibration/Model/sim_output/DetectorData_2017-07-14 115950.csv'	# Trial run: constant demand
-#data = 'C:/Users/suzep/Dropbox/Aimsun_calibration/Model/sim_output/DetectorData_2017-07-14 124533.csv'	# Det. 16 is 22 ft
-data = 'C:/Users/suzep/Dropbox/Aimsun_calibration/Model/sim_output/DetectorData_2017-07-14 132502.csv'	# Clearance is 7.10 ft instead of 9.10
+#data = detectorDataFilePath + 'DetectorData_2017-07-13 160215.csv'
+#data = detectorDataFilePath + 'DetectorData_2017-07-14 115950.csv'	# Trial run: constant demand
+#data = detectorDataFilePath + 'DetectorData_2017-07-14 124533.csv'	# Det. 16 is 22 ft
+#data = detectorDataFilePath + 'DetectorData_2017-07-14 132502.csv'	# Clearance is 7.10 ft instead of 9.10
+
+
+# Data from LB Test #6 (Testing approach on Section 826)
+#data = detectorDataFilePath + 'DetectorData_2017-07-17 100658.csv' # Trial 2
+#data = detectorDataFilePath + 'DetectorData_2017-07-17 103952.csv'	# Trial 3
+#data = detectorDataFilePath + 'DetectorData_2017-07-17 115545.csv'	# Trial 4: some queue spillback for TH on 826
+
+#data = detectorDataFilePath + 'DetectorData_2017-07-17 133619.csv'	# Trial 5, Case 3: full stopbar detector coverage
+#data = detectorDataFilePath + 'DetectorData_2017-07-17 133619_only_LT.csv' # Trial 5: no detectorss 13, 14, 15 (only LT on section 826)
+#data = detectorDataFilePath + 'DetectorData_2017-07-17 133619_Case4.csv' # Trial 5, Case 4: no detector 13 (right turn stopbar on section 826)
+
+
+# Data from LB Test #7 (Testing approach on Section 825)
+#data = detectorDataFilePath + 'DetectorData_2017-07-31 112301.csv'			# Trial 1, Case 1
+data = detectorDataFilePath + 'DetectorData_2017-07-31 112301_Case2.csv'	# Trial 1, Case 2 (Removed detectors 9, 10)
 
 
 # Outline Aimsun network: connections between intersections, approaches, movements, and detectors
@@ -42,7 +57,7 @@ def main():
 	global detectorDict
 
 
-# ********** Get lane blockage detection working for completed simulation first (not real time) ********************
+# ***************** Lane blockage detection scheme for completed simulation (not real time) ********************
 	times = read_detector_file(data, detectorDict)
 
 	# Determine lane blockage conclusion at each time step for each approach, add to LB_Conclusions dictionary
@@ -64,10 +79,6 @@ def make_LB_conclusion(timeStep, intrsct, app):
 	global detectorDict
 
 
-	# Initialize dictionaries for advanced and stopbar states: {turn: states}
-	dict_adv_states = {'Left':None, 'Through':None, 'Right':None}
-	dict_sb_states = {'Left':None, 'Through':None, 'Right':None}
-
 	# Check advanced detectors: if any do not have information, conclude 'No Information'
 	for mvmt in app.movements.values():
 		adv_states = estimate_movement_state(mvmt, timeStep, category='Advanced')
@@ -79,27 +90,32 @@ def make_LB_conclusion(timeStep, intrsct, app):
 			LB_Conclusions['SectionID'].append(app.sectionID)
 			return
 
-		dict_adv_states[mvmt.direction] = adv_states
+	# Now have determined states for all available advanced detectors 
 
-	# Now have determined states for all available advanced detectors
-	all_states = [state for each_mvmt in dict_adv_states.values() for state in each_mvmt]	# Flattens states into one list
-	if all(state=='Uncongested' for state in all_states):
-		# All advanced detectors are uncongested
+	# Check if all advanced detectors are uncongested, using the MAX green time out of this approach's movements to find critical occupancies
+	if uncongested_approach_check(app, timeStep):
+		# All advanced detectors are uncongested based off MAX green time
 		LB_Conclusions['Conclusion'].append('No Lane Blockage or Congestion')
 		LB_Conclusions['Time'].append(timeStep)
 		LB_Conclusions['SectionID'].append(app.sectionID)
 		return
 	else:
 		# Check stopbar detectors
+		# Initialize dictionary for stopbar states: {turn: states}
+		dict_sb_states = {}
+
 		for mvmt in app.movements.values():
 			sb_states = estimate_movement_state(mvmt, timeStep, category='Stopbar')
-			dict_sb_states[mvmt.direction] = sb_states
+			if sb_states is not None:
+				dict_sb_states[mvmt.direction] = sb_states
 
 	# Now have determined states for all available stopbar detectors
 
+	# Check how many movements have data
+	numMoves = len(dict_sb_states.keys())
+
 	# Check if all stopbar detectors had no data
-	if all(state==None for state in dict_sb_states.values()):
-		# No data for stopbar detectors
+	if numMoves == 0:
 		concl_type = determine_type(app, timeStep)
 		LB_Conclusions['Conclusion'].append(concl_type + ' by Unknown Downstream Traffic')
 		LB_Conclusions['Time'].append(timeStep)
@@ -109,70 +125,45 @@ def make_LB_conclusion(timeStep, intrsct, app):
 	# Check if any stopbar detectors had queue spillback
 	spillback_movements = []
 	for turn in dict_sb_states.keys():
-		if dict_sb_states[turn] is not None and any(state=='Queue Spillback' for state in dict_sb_states[turn]):
-			# Movement had queue spillback
+		if any(state=='Queue Spillback' for state in dict_sb_states[turn]):
 			spillback_movements.append(turn)
+
 	if spillback_movements != []:
-		# Conclude Lane Blockage by Movement(s) with Queue Spillback
+		# Case: Movement(s) with Queue Spillback
 		spillback_turns = set()
 		for turn in spillback_movements:
 			spillback_turns.update(find_lane_group(app, turn))
 
-		LB_Conclusions['Conclusion'].append('Lane Blockage by Queue Spillback from ' + ' '.join(spillback_turns) + ' Movements')
+		concl_type = determine_type(app, timeStep)
+		LB_Conclusions['Conclusion'].append(concl_type + ' with Queue Spillback from ' + ' '.join(spillback_turns) + ' Movements')
 		LB_Conclusions['Time'].append(timeStep)
 		LB_Conclusions['SectionID'].append(app.sectionID)
 		return
 
-	# Check how many movements have data
-	numMoves = sum(bool(turn) for turn in dict_sb_states.values())
-
-	if numMoves == 1:
+	if numMoves < 3:
+		# Not full detector coverage at stopbar
 		concl_type = determine_type(app, timeStep)
 		LB_Conclusions['Conclusion'].append(concl_type + ' by Unknown Downstream Traffic')
 		LB_Conclusions['Time'].append(timeStep)
 		LB_Conclusions['SectionID'].append(app.sectionID)
 		return
-	elif numMoves == 2:
-		# Check if both moves are uncongested
-		if sum(turn=='Uncongested' for turn in dict_sb_states.values()) == 2:
-			concl_type = determine_type(app, timeStep)
-			LB_Conclusions['Conclusion'].append(concl_type + ' by Unknown Downstream Traffic')
-			LB_Conclusions['Time'].append(timeStep)
-			LB_Conclusions['SectionID'].append(app.sectionID)
-			return
-		else:
-			missing_data = next(turn for turn, movement in dict_sb_states.items() if movement==None)
 
-			concl_type = determine_type(app, timeStep)
-			LB_Conclusions['Conclusion'].append(concl_type + ' by ' + missing_data + ' movement OR behavior between stopbar and advanced detectors')
-			LB_Conclusions['Time'].append(timeStep)
-			LB_Conclusions['SectionID'].append(app.sectionID)
-			return
 	else:
-		# All 3 movements have data
-		# Check if all uncongested
-		if sum(turn=='Uncongested' for turn in dict_sb_states.values()) == 3:
-			concl_type = determine_type(app, timeStep)
-			LB_Conclusions['Conclusion'].append(concl_type + ' behavior between stopbar and advanced detectors')
-			LB_Conclusions['Time'].append(timeStep)
-			LB_Conclusions['SectionID'].append(app.sectionID)
-			return
-		else:
-			# Find which movement has lowest distance to stopbar
-			distance_dict = {}
-			for mvmt in app.movements.values():
-				curr_dist = dist_to_sb(mvmt, timeStep)
-				distance_dict[mvmt.direction] = curr_dist
+		# Full detector coverage at stopbar
+		# Find which movement has occupancy closest to stopbar critical occupancy
+		distance_dict = {}
+		for mvmt in app.movements.values():
+			curr_dist = distance_to_stopbar(mvmt, timeStep)
+			distance_dict[mvmt.direction] = curr_dist
 
-			most_congested_mvmt = min(distance_dict, key=distance_dict.get)
+		most_congested_mvmt = min(distance_dict, key=distance_dict.get)
+		lane_group = find_lane_group(app, most_congested_mvmt)
 
-			guilty_movements = find_lane_group(app, most_congested_mvmt)
-
-			concl_type = determine_type(app, timeStep)
-			LB_Conclusions['Conclusion'].append(concl_type + ' by ' + ' '.join(guilty_movements) + ' Movement(s)')
-			LB_Conclusions['Time'].append(timeStep)
-			LB_Conclusions['SectionID'].append(app.sectionID)
-			return
+		concl_type = determine_type(app, timeStep)
+		LB_Conclusions['Conclusion'].append(concl_type + ' by ' + ' '.join(lane_group) + ' Movement(s)')
+		LB_Conclusions['Time'].append(timeStep)
+		LB_Conclusions['SectionID'].append(app.sectionID)
+		return
 
 
 def estimate_movement_state(mvmt, curr_time, category):
@@ -203,62 +194,96 @@ def estimate_movement_state(mvmt, curr_time, category):
 		return states
 
 
-def estimate_detector_state(det, curr_time, turn, category):
+def estimate_detector_state(det, curr_time, turn, category, maxGreen=None):
 	# Determine traffic state for this detector
 	try:
-		index = np.where(det.time == curr_time)[0][0]		# Find index in detector's occupancy array that corresponds to the current time
+		# Find index in detector's occupancy array that corresponds to the current time
+		index = np.where(det.time == curr_time)[0][0]
 	except IndexError:
 		# No data at this time step for this detector
 		#print('Missing data for ' + category + ' ' + mvmt.direction + ' turn of section ' + str(mvmt.approach.sectionID))
 		return None
 
-	curr_occ = det.occupancy[index]							# Current occupancy
-	critical_occs = calculate_critical_occupancies(det, turn)
+	curr_occ = det.occupancy[index]	  # Current occupancy
+	crit_occs = calculate_critical_occupancies(det, turn, maxGreen)
 
-	if curr_occ < critical_occs[0]:
+	if curr_occ < crit_occs[0]:
+		det.currentState = 'Uncongested'
 		return 'Uncongested'
 
-	elif category=='Advanced' and curr_occ < critical_occs[1]:
+	elif category=='Advanced' and curr_occ < crit_occs[1]:
+		det.currentState='Congested'
 		return 'Congested'
 	else:
+		det.currentState='Queue Spillback'
 		return 'Queue Spillback'
 
 
-def calculate_critical_occupancies(detector, turn):
-	# Calculate critical occupancies for detector
-	# turn: 'Left', 'Through', or 'Right'
+def uncongested_approach_check(app, curr_time):
+	# Returns True if all advanced detectors are uncongested using the MAX green time over all movements, False otherwise
 
-	global vehLength
-	global clearance
+	# Find max green time
+	mvmts = list(app.movements.values())
+	maxGreen = max([mvmt.greenTime for mvmt in mvmts])
+
+	# Find advanced detectors for this approach
+	adv_dets = set([]) 
+	for mvmt in app.movements.values():
+		for detector in mvmt.detectors.values():
+			if detector.category=='Advanced':
+				adv_dets.update([detector])
+
+	# adv_set contains set of advanced detectors for this approach
+	adv_set = set(adv_dets)
+	adv_states = []
+	for detector in adv_set:
+		for turn in detector.movements.keys():
+			adv_states.append(estimate_detector_state(detector, curr_time, turn, category='Advanced', maxGreen=maxGreen))
+
+	return(all(state=='Uncongested' for state in adv_states))
+
+
+def calculate_critical_occupancies(detector, turn, maxGreen=None):
+	# Set detector's criticalOccs field to calculated occupancies for each individual turn
+	# turn: 'Left', 'Through', or 'Right'
+	# maxGreen: maximum green time for any movement at this approach
+		# (only provide maxGreen argument when checking if advanced detectors are uncongested)
+	
+	global VEH_LENGTH
+	global CLEARANCE
 
 	# Set variables needed in equation
 	
-	L = float(vehLength)							# feet
+	L = float(VEH_LENGTH)							# feet
 	D = float(detector.length)				 		# feet
-	G = float(detector.movements[turn].greenTime) 							# seconds
-	C = float(detector.movements[turn].approach.intersection.cycleTime)    	# seconds
-	h = float(detector.movements[turn].headway)								# seconds
-	v_sat_sb = float(detector.movements[turn].satVelocityStopbar) 			# miles per hour
-	v_sat_adv = float(detector.movements[turn].satVelocityAdvanced) 		# miles per hour
+	G = maxGreen if maxGreen is not None else float(detector.movements[turn].greenTime)	# seconds
+	C = float(detector.movements[turn].approach.intersection.cycleTime)    				# seconds
+	h = float(detector.movements[turn].headway)											# seconds
+	v_sat_sb = float(detector.movements[turn].satVelocityStopbar) 						# miles per hour
+	v_sat_adv = float(detector.movements[turn].satVelocityAdvanced) 					# miles per hour
+
+	# If detector length is too long, raise critical occupancy to account for errors
+	error_correction = 1				# No errors accounted for
+	if D > (L+CLEARANCE):
+		error_correction = 1.05 		# Account for 5 % error if the detector is too long to distinguish vehicles
 
 	if detector.category == 'Stopbar':
-		# If detector length is too long, raise critical occupancy to account for errors
-		error_correction = 1					# No errors accounted for
-		if D > (L+clearance):
-			error_correction = 1.05 			# Account for 5 % error
+		if maxGreen is not None:
+			raise Exception('Cannot use max green time to calculate critical occs for stopbar detectors!')
 
 		occ_crit = ((L+D)*3600.0 / (v_sat_sb*5280.0))  * (1.0/h) * (G/C) + ((C-G)/C)
-		occupancies = [occ_crit*100*error_correction, None]
-		detector.criticalOccs = occupancies
-
+		occupancies = [min(occ_crit*100*error_correction,100), None]	# Max critical occupancy is 100 %
+		detector.criticalOccs[turn] = occupancies
 		return occupancies
 
 	# If here: category=='Advanced'
-	occ_crit_1 = ((L+D)*3600.0 / (v_sat_sb*5280.0))  * (1.0/h) * (G/C)
-	occ_crit_2 = ((L+D)*3600.0 / (v_sat_sb*5280.0))  * (1.0/h) * (G/C) + ((C-G)/C)
+	occ_crit_1 = ((L+D)*3600.0 / (v_sat_adv*5280.0))  * (1.0/h) * (G/C)
+	occ_crit_2 = ((L+D)*3600.0 / (v_sat_adv*5280.0))  * (1.0/h) * (G/C) + ((C-G)/C)
 
-	occupancies = [occ_crit_1*100, occ_crit_2*100]
-	detector.criticalOccs = occupancies
+	occupancies = [occ_crit_1*100*error_correction, min(occ_crit_2*100*error_correction,100)]
+
+	if maxGreen is None:
+		detector.criticalOccs[turn] = occupancies
 
 	return occupancies
 
@@ -283,7 +308,8 @@ def determine_type(app, curr_time):
 					# If detector is congested, calculate % congestion		
 					index = np.where(det.time == curr_time)[0][0]		# Find index in detector's occupancy array that corresponds to the current time
 					curr_occ = det.occupancy[index]						# Current occupancy
-					curr_percent_congestion = [((curr_occ - det.criticalOccs[0]) / (det.criticalOccs[1]-det.criticalOccs[0])) * 100]
+					crit_occs = det.criticalOccs[mvmt.direction]
+					curr_percent_congestion = [((curr_occ - crit_occs[0]) / (crit_occs[1]-crit_occs[0])) * 100]
 					percent_congestion = percent_congestion + [curr_percent_congestion]
 
 	max_percent_congestion = round(max(percent_congestion)[0],2)	# Get % congestion from most congested detector, round to 2 decimal places
@@ -292,22 +318,21 @@ def determine_type(app, curr_time):
 	return str(max_percent_congestion) + ' % Congested'
 
 
-def dist_to_sb(mvmt, curr_time):
-	# Returns average distance of stopbar detectors
+def distance_to_stopbar(mvmt, curr_time):
+	# Returns distance of occupancy to stopbar critical occupancy, averaged over all detectors covering this movement
 
 	distances = []
 
 	for det in mvmt.detectors.values():
 		if det.category == 'Stopbar':
-			det_state = estimate_detector_state(det, curr_time, mvmt.direction, 'Stopbar')
-			if (det_state is not None) and (det_state=='Uncongested'):
+			if (det.currentState is not None) and (det.currentState=='Uncongested'):
 				# If detector is uncongested, calculate distance to stopbar critical occupancy		
 				index = np.where(det.time == curr_time)[0][0]		# Find index in detector's occupancy array that corresponds to the current time
 				curr_occ = det.occupancy[index]						# Current occupancy
-				curr_dist = [(det.criticalOccs[0] - curr_occ) / det.criticalOccs[0]]
+				curr_dist = [(det.criticalOccs[mvmt.direction][0] - curr_occ) / det.criticalOccs[mvmt.direction][0]]
 				distances = distances + [curr_dist]
 
-	avg_dist = round(np.mean(distances), 2) # Get average, round to 2 decimal places
+	avg_dist = round(np.mean(distances), 5) # Get average, round to 5 decimal places
 
 	return avg_dist
 
@@ -334,6 +359,7 @@ def find_lane_group(app, turn):
 			turn_set.update([mvmt.direction])
 
 	return turn_set
+	
 
 def read_detector_file(detectorDataFile, detectorDict):
 	# Read in data from completed simulation before calling algorithm

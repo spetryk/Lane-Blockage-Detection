@@ -1,0 +1,10 @@
+body {
+ font-family: Lato, Arial, sans-serif;
+    font-size: 100%;
+    width: 80%;
+    margin-right: auto;
+    margin-left: auto;
+    padding: 2.5% 2.5% 0;
+    background: white;
+    line-height: 1.8;
+}
