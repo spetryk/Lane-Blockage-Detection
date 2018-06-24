@@ -1,29 +1,63 @@
 <!doctype html>
 
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title>Lane Blockage Detection</title>
-        <link rel="stylesheet" href="_css/styles.css">
-    </head>
-    <body>
-        
-        
-        <div id="container">
-            <div id="tabLT">
-                <h2>Left Turn Blockage</h2>
-                <video width="500" height="300" controls>
-                    <source src="/Videos/LT_blockage.mp4" type="video/mp4">
-        
-                    Your browser does not support the video tag.
-                </video>
-            </div>
-            
-        </div>
-        
-        
-        
-        
-    </body>
-    
+  <head>
+    <meta charset="utf-8">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <title>Lane Blockage Detection</title>
+    <link rel="stylesheet" href="_css/styles.css">
+    <link href="https://vjs.zencdn.net/7.0.3/video-js.css" rel="stylesheet">
+    <script src="https://vjs.zencdn.net/7.0.3/video.js"></script>
+  </head>
+  <body>
+
+    <h2> Left Turn Blockage</h2>
+    <div id="text"></div>
+    <video id="left-turn" class="video-js" controls preload="auto" width="600" height="200" data-setup="{}">
+      <source src="/Videos/LT_blockage.mp4" type='video/mp4'>
+      <p class="vjs-no-js">
+        To view this video please enable JavaScript, and consider upgrading to a web browser that
+        <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+      </p>
+    </video>
+
+    <script>
+     var player = videojs('left-turn')
+
+     player.on('ready', onReady);
+     player.on('timeupdate', update);
+     player.on('ended', onEnd);
+
+     function onReady() {
+       var textDiv = document.getElementById('text');
+       var content = document.createTextNode('foobar test');
+       textDiv.appendChild(content);
+       console.log(player.duration());
+
+       player.currentTime(5);
+       player.play();
+
+       console.log(player.currentTime());
+       console.log(player.duration());
+
+       /*while (!player.ended()){
+
+          }*/
+     };
+
+     function update() {
+       console.log(player.currentTime());
+
+     }
+
+     function onEnd(){
+       console.log('ended');
+       console.log(player.ended());
+     }
+
+
+
+    </script>
+
+  </body>
 </html>
