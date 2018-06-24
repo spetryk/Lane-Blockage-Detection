@@ -1,0 +1,2 @@
+- create hash function from current video time -> conclusion range
+- loop through conclusion times, when value if > than current time, take previous range

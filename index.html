@@ -5,14 +5,14 @@
     <meta charset="utf-8">
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <title>Lane Blockage Detection</title>
-    <link rel="stylesheet" href="_css/styles.css">
+    <link rel="stylesheet" href="_css/styles.css?<?php rand() ?">
     <link href="https://vjs.zencdn.net/7.0.3/video-js.css" rel="stylesheet">
     <script src="https://vjs.zencdn.net/7.0.3/video.js"></script>
   </head>
   <body>
 
     <h2> Left Turn Blockage</h2>
-    <div id="text"></div>
+    <p id="text"></p>
     <video id="left-turn" class="video-js" controls preload="auto" width="600" height="200" data-setup="{}">
       <source src="/Videos/LT_blockage.mp4" type='video/mp4'>
       <p class="vjs-no-js">
@@ -21,40 +21,70 @@
       </p>
     </video>
 
+    <p id="conclusion"></p>
+
     <script>
-     var player = videojs('left-turn')
+     var player = videojs('left-turn');
+     var conclusionDiv = document.getElementById('conclusion');
+     var duration;
+     var timeScale;
+     var conclusions;
+     var mapConclusions;
 
      player.on('ready', onReady);
      player.on('timeupdate', update);
-     player.on('ended', onEnd);
 
      function onReady() {
        var textDiv = document.getElementById('text');
-       var content = document.createTextNode('foobar test');
+       var content = document.createTextNode('test');
        textDiv.appendChild(content);
-       console.log(player.duration());
 
-       player.currentTime(5);
-       player.play();
 
-       console.log(player.currentTime());
-       console.log(player.duration());
-
-       /*while (!player.ended()){
-
-          }*/
      };
 
      function update() {
-       console.log(player.currentTime());
+       if (isNaN(duration)){
+         duration = player.duration();
+         var timeMin = d3.min(conclusions, d => d.Time);
+         var timeMax = d3.max(conclusions, d => d.Time);
+         timeScale = d3.scaleLinear().domain([timeMin, timeMax]).range([0, duration]);
+         mapConclusions = d3.map(mapConclusions, d => d.videoTime = timeScale(d.Time));
+       }
+       update_conclusion();
+     }
+
+
+     // Load csv containing conclusions
+     d3.queue()
+       .defer(d3.csv, "Conclusions/tests/test_left_turn.csv", parseRow)
+       .await(show_conclusions);
+
+     /*
+        Parse rows of file holding lane blockage conclusions at each time step.
+        Returns: array with entries as {Time: (time in seconds);
+        Conclusion: (conclusion as string)}
+      */
+     function parseRow(row){
+       row.Time = Number(row["Time (s)"]);
+       row.Conclusion = row["Conclusion"];
+       return row;
+     }
+
+     function show_conclusions(error, conclusion) {
+       conclusions = conclusion;
+       console.log(conclusions);
+
+       // Save data from Conclusions file into a map indexed by Time
+       mapConclusions = d3.nest().key(d => d.Time).map(conclusions)
+
 
      }
 
-     function onEnd(){
-       console.log('ended');
-       console.log(player.ended());
-     }
+     function update_conclusion() {
+       var curr_time = player.currentTime();
+       
 
+     }
 
 
     </script>
