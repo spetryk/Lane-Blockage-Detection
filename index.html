@@ -12,10 +12,28 @@
     <style>
      svg { border: solid #ccc 1px; }
 
-     .conclusionDiv {
-       position: absolute;
-       right: 5px
-       top: 10px;
+     section {
+       width: 100%;
+     }
+
+     article {
+       position: relative;
+       top: 50%;
+       left: 50%;
+       padding: 1rem;
+       text-align: center;
+       transform: translate(-50%, 0%);
+     }
+
+     .left-half {
+       background-color: #ff9e2c;
+       float: left;
+       width: 50%;
+     }
+     .right-half {
+       background-color: #b6701e;
+       float: left;
+       width: 50%;
      }
 
     </style>
@@ -25,17 +43,25 @@
 
     <h2> Left Turn Blockage</h2>
 
-    <video id="left-turn" class="video-js" controls preload="auto" width="600" height="200" data-setup="{}">
-      <source src="/Videos/LT_blockage.mp4" type='video/mp4'>
-      <p class="vjs-no-js">
-        To view this video please enable JavaScript, and consider upgrading to a web browser that
-        <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-      </p>
-    </video>
+    <section class="Video and conclusion">
+      <div class="left-half">
+        <article>
+          <video id="left-turn" class="video-js" controls preload="auto" width="600" height="200" data-setup="{}">
+            <source src="/Videos/LT_blockage.mp4" type='video/mp4'>
+            <p class="vjs-no-js">
+              To view this video please enable JavaScript, and consider upgrading to a web browser that
+              <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+            </p>
+          </video>
+        </article>
+      </div>
 
-    <div class="conclusionDiv">
-      <svg class="conclusionSVG" height="500" width="500"> </svg>
-    </div>
+      <div class="right-half">
+        <article>
+          <svg class="conclusionSVG" height="100" width="500"> </svg>
+        </article>
+      </div>
+    </section>
 
 
     <p id="conclusion"></p>
@@ -79,10 +105,10 @@
        .defer(d3.csv, "Conclusions/tests/test_left_turn.csv", parseRow)
        .await(show_conclusions);
 
-     /*
-        Parse rows of file holding lane blockage conclusions at each time step.
-        Returns: array with entries as {Time: (time in seconds);
-        Conclusion: (conclusion as string)}
+     /**
+      * Parse rows of file holding lane blockage conclusions at each time step.
+      * Returns: array with entries as {Time: (time in seconds);
+      * Conclusion: (conclusion as string)}
       */
      function parseRow(row){
        row.Time = Number(row["Time (s)"]);
@@ -92,23 +118,16 @@
 
      function show_conclusions(error, conclusion) {
        conclusions = conclusion;
-       console.log(conclusions);
-
-       // Save data from Conclusions file into a map indexed by Time
-       //mapConclusions = d3.nest().key(d => d.Time).map(conclusions)
-
      }
 
+     /* Update conclusion text on page to match current traffic condition. */
      function update_conclusion() {
        var curr_time = Math.round(player.currentTime());
        if ("$" + curr_time in mapConclusions) {
          var entry = mapConclusions["$" + curr_time];
          d3.select('.conclusionText').text(entry.Conclusion);
-
        }
      }
-
-
     </script>
 
   </body>
