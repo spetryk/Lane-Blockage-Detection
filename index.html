@@ -8,11 +8,23 @@
     <link rel="stylesheet" href="_css/styles.css?<?php rand() ?">
     <link href="https://vjs.zencdn.net/7.0.3/video-js.css" rel="stylesheet">
     <script src="https://vjs.zencdn.net/7.0.3/video.js"></script>
+
+    <style>
+     svg { border: solid #ccc 1px; }
+
+     .conclusionDiv {
+       position: absolute;
+       right: 5px
+       top: 10px;
+     }
+
+    </style>
+
   </head>
   <body>
 
     <h2> Left Turn Blockage</h2>
-    <p id="text"></p>
+
     <video id="left-turn" class="video-js" controls preload="auto" width="600" height="200" data-setup="{}">
       <source src="/Videos/LT_blockage.mp4" type='video/mp4'>
       <p class="vjs-no-js">
@@ -20,6 +32,11 @@
         <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
       </p>
     </video>
+
+    <div class="conclusionDiv">
+      <svg class="conclusionSVG" height="500" width="500"> </svg>
+    </div>
+
 
     <p id="conclusion"></p>
 
@@ -31,14 +48,15 @@
      var conclusions;
      var mapConclusions;
 
+     var svg = d3.select(".conclusionSVG");
+     svg.append('text').attr('class', 'conclusionText').attr('fill', 'black')
+     .attr('x', 50).attr('y', 50);
+
      player.on('ready', onReady);
      player.on('timeupdate', update);
+     player.play();
 
      function onReady() {
-       var textDiv = document.getElementById('text');
-       var content = document.createTextNode('test');
-       textDiv.appendChild(content);
-
 
      };
 
@@ -48,7 +66,9 @@
          var timeMin = d3.min(conclusions, d => d.Time);
          var timeMax = d3.max(conclusions, d => d.Time);
          timeScale = d3.scaleLinear().domain([timeMin, timeMax]).range([0, duration]);
-         mapConclusions = d3.map(mapConclusions, d => d.videoTime = timeScale(d.Time));
+         mapConclusions = d3.map(conclusions, d => d.videoTime = Math.round(timeScale(d.Time)));
+
+
        }
        update_conclusion();
      }
@@ -75,15 +95,17 @@
        console.log(conclusions);
 
        // Save data from Conclusions file into a map indexed by Time
-       mapConclusions = d3.nest().key(d => d.Time).map(conclusions)
-
+       //mapConclusions = d3.nest().key(d => d.Time).map(conclusions)
 
      }
 
      function update_conclusion() {
-       var curr_time = player.currentTime();
-       
+       var curr_time = Math.round(player.currentTime());
+       if ("$" + curr_time in mapConclusions) {
+         var entry = mapConclusions["$" + curr_time];
+         d3.select('.conclusionText').text(entry.Conclusion);
 
+       }
      }
 
 
