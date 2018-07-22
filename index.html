@@ -6,29 +6,35 @@
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <title>Lane Blockage Detection</title>
     <!-- <link rel="stylesheet" href="css/styles.css?<?php rand() ?">-->
-    <link rel="stylesheet" href="css/styles.css?version=1">
+    <link rel="stylesheet" href="css/styles.css?version=2">
     <link href="https://vjs.zencdn.net/7.0.3/video-js.css" rel="stylesheet">
     <script src="https://vjs.zencdn.net/7.0.3/video.js"></script>
   </head>
   <body>
 
     <h2> Left Turn Blockage</h2>
+    <br>
 
-    <section class="Video and conclusion">
-      <div class="videoDiv">
-          <video id="left-turn" class="video-js" controls preload="auto" width="600" height="337.5" data-setup="{}">
-            <source src="/Videos/LT-blockage-cropped.mp4" type='video/mp4'>
-            <p class="vjs-no-js">
-              To view this video please enable JavaScript, and consider upgrading to a web browser that
-              <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-            </p>
-          </video>
+    <div class="grid-container">
+      <div class="header">
+        <h2>Header</h2>
       </div>
-
-      <div class="conclusionDiv">
-          <svg class="conclusionSVG" height="500" width="500"> </svg>
+      <div class="left" style="background-color:#aaa;">
+        <video id="left-turn" class="video-js" controls preload="auto" width="600" height="337.5" data-setup="{}">
+          <source src="/Videos/LT-blockage-cropped.mp4" type='video/mp4'>
+          <p class="vjs-no-js">
+            To view this video please enable JavaScript, and consider upgrading to a web browser that
+            <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+          </p>
+        </video>
       </div>
-    </section>
+      <div class="right" style="background-color:#bbb;">
+        <svg class="conclusionSVG" height="100" width="200"> </svg>
+      </div>
+      <div class="footer">
+        <p>Footer</p>
+      </div>
+    </div>
 
     <script>
      var player = videojs('left-turn');
