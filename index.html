@@ -29,7 +29,7 @@
         </video>
       </div>
       <div class="right" style="background-color:#bbb;">
-        <svg class="conclusionSVG" height="100" width="200"> </svg>
+        <svg class="conclusionSVG" height="337.5" width="337.5"> </svg>
       </div>
       <div class="footer">
         <p>Footer</p>
@@ -44,8 +44,11 @@
      var mapConclusions;
 
      var svg = d3.select(".conclusionSVG");
+     var width = Number(svg.attr('width'));
+     var height = Number(svg.attr('height'));
      svg.append('text').attr('class', 'conclusionText').attr('fill', 'black')
-     .attr('x', 50).attr('y', 50);
+        .attr('x', width/2).attr('y', 50)
+        .attr('text-anchor', 'middle');
 
      player.on('timeupdate', update);
      player.play();
