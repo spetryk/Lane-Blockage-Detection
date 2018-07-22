@@ -5,70 +5,33 @@
     <meta charset="utf-8">
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <title>Lane Blockage Detection</title>
-    <link rel="stylesheet" href="_css/styles.css?<?php rand() ?">
+    <!-- <link rel="stylesheet" href="css/styles.css?<?php rand() ?">-->
+    <link rel="stylesheet" href="css/styles.css?version=1">
     <link href="https://vjs.zencdn.net/7.0.3/video-js.css" rel="stylesheet">
     <script src="https://vjs.zencdn.net/7.0.3/video.js"></script>
-
-    <style>
-     svg { border: solid #ccc 1px; }
-
-     section {
-       width: 100%;
-     }
-
-     article {
-       position: relative;
-       top: 50%;
-       left: 50%;
-       padding: 1rem;
-       text-align: center;
-       transform: translate(-50%, 0%);
-     }
-
-     .left-half {
-       background-color: #ff9e2c;
-       float: left;
-       width: 50%;
-     }
-     .right-half {
-       background-color: #b6701e;
-       float: left;
-       width: 50%;
-     }
-
-    </style>
-
   </head>
   <body>
 
     <h2> Left Turn Blockage</h2>
 
     <section class="Video and conclusion">
-      <div class="left-half">
-        <article>
-          <video id="left-turn" class="video-js" controls preload="auto" width="600" height="200" data-setup="{}">
-            <source src="/Videos/LT_blockage.mp4" type='video/mp4'>
+      <div class="videoDiv">
+          <video id="left-turn" class="video-js" controls preload="auto" width="600" height="337.5" data-setup="{}">
+            <source src="/Videos/LT-blockage-cropped.mp4" type='video/mp4'>
             <p class="vjs-no-js">
               To view this video please enable JavaScript, and consider upgrading to a web browser that
               <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
             </p>
           </video>
-        </article>
       </div>
 
-      <div class="right-half">
-        <article>
-          <svg class="conclusionSVG" height="100" width="500"> </svg>
-        </article>
+      <div class="conclusionDiv">
+          <svg class="conclusionSVG" height="500" width="500"> </svg>
       </div>
     </section>
 
-
-    <p id="conclusion"></p>
-
     <script>
      var player = videojs('left-turn');
-     var conclusionDiv = document.getElementById('conclusion');
      var duration;
      var timeScale;
      var conclusions;
@@ -78,13 +41,8 @@
      svg.append('text').attr('class', 'conclusionText').attr('fill', 'black')
      .attr('x', 50).attr('y', 50);
 
-     player.on('ready', onReady);
      player.on('timeupdate', update);
      player.play();
-
-     function onReady() {
-
-     };
 
      function update() {
        if (isNaN(duration)){
@@ -93,8 +51,6 @@
          var timeMax = d3.max(conclusions, d => d.Time);
          timeScale = d3.scaleLinear().domain([timeMin, timeMax]).range([0, duration]);
          mapConclusions = d3.map(conclusions, d => d.videoTime = Math.round(timeScale(d.Time)));
-
-
        }
        update_conclusion();
      }
@@ -107,8 +63,8 @@
 
      /**
       * Parse rows of file holding lane blockage conclusions at each time step.
-      * Returns: array with entries as {Time: (time in seconds);
-      * Conclusion: (conclusion as string)}
+      * Returns: array with entries as {Time:        (time in seconds);
+      *                                 Conclusion:  (conclusion as string)}
       */
      function parseRow(row){
        row.Time = Number(row["Time (s)"]);
