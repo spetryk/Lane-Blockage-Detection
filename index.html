@@ -5,36 +5,37 @@
     <meta charset="utf-8">
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <title>Lane Blockage Detection</title>
-    <!-- <link rel="stylesheet" href="css/styles.css?<?php rand() ?">-->
-    <link rel="stylesheet" href="css/styles.css?version=2">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/styles2.css?version=12">
+
     <link href="https://vjs.zencdn.net/7.0.3/video-js.css" rel="stylesheet">
     <script src="https://vjs.zencdn.net/7.0.3/video.js"></script>
   </head>
   <body>
 
-    <h2> Left Turn Blockage</h2>
-    <br>
+    <div class="tab">
+      <button class="tablink" onclick="openCase('LTB', this)">Left Turn Blockage</button>
+      <button class="tablink" onclick="openCase('TQSB', this)" id="defaultOpen">Through Queue Spillback</button>
+    </div>
 
-    <div class="grid-container">
-      <div class="header">
-        <h2>Header</h2>
-      </div>
-      <div class="left" style="background-color:#aaa;">
-        <video id="left-turn" class="video-js" controls preload="auto" width="600" height="337.5" data-setup="{}">
-          <source src="/Videos/LT-blockage-cropped.mp4" type='video/mp4'>
-          <p class="vjs-no-js">
-            To view this video please enable JavaScript, and consider upgrading to a web browser that
-            <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-          </p>
-        </video>
-      </div>
+    <div id="LTB" class="tabcontent">
+      <h3> this is the left turn blockage</h3>
+      <video id="left-turn" class="video-js" controls preload="auto" width="600" height="337.5" data-setup="{}">
+        <source src="/Videos/LT-blockage-cropped.mp4" type='video/mp4'>
+        <p class="vjs-no-js">
+          To view this video please enable JavaScript, and consider upgrading to a web browser that
+          <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+        </p>
+      </video>
       <div class="right" style="background-color:#bbb;">
         <svg class="conclusionSVG" height="337.5" width="337.5"> </svg>
       </div>
-      <div class="footer">
-        <p>Footer</p>
-      </div>
     </div>
+
+    <div id="TQSB" class="tabcontent">
+      <h3> this is the through QSB</h3>
+    </div>
+
 
     <script>
      var player = videojs('left-turn');
@@ -65,7 +66,7 @@
      }
 
 
-     // Load csv containing conclusions
+    // Load csv containing conclusions
      d3.queue()
        .defer(d3.csv, "Conclusions/tests/test_left_turn.csv", parseRow)
        .await(show_conclusions);
@@ -93,6 +94,35 @@
          d3.select('.conclusionText').text(entry.Conclusion);
        }
      }
+
+
+     function openCase(caseName, elmnt){
+
+       // Declare all variables
+       var i, tabcontent, tablinks;
+
+       // Get all elements with class="tabcontent" and hide them
+       tabcontent = document.getElementsByClassName("tabcontent");
+       for (i = 0; i < tabcontent.length; i++) {
+         tabcontent[i].style.display = "none";
+       }
+
+       // Get all elements with class="tablinks" and remove the class "active"
+       tablinks = document.getElementsByClassName("tablinks");
+       for (i = 0; i < tablinks.length; i++) {
+         tablinks[i].className = tablinks[i].className.replace(" active", "");
+       }
+
+       // Show the current tab, and add an "active" class to the button that opened the tab
+       document.getElementById(caseName).style.display = "block";
+       evt.currentTarget.className += " active";
+
+
+     }
+
+     // Get the element with id="defaultOpen" and click on it
+     document.getElementById("defaultOpen").click();
+
     </script>
 
   </body>
