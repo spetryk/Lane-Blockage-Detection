@@ -22,6 +22,7 @@ p {
 
 
 h2 {
+    font-family: Lato, Arial, sans-serif;
     margin: auto;
     text-align: center;
     font-size: 20px;
@@ -63,6 +64,7 @@ svg { border: solid #ccc 1px; }
 /* Style the left column */
 .left {
   grid-area: left;
+
   text-align: center;
   display: flex;
   justify-content: center;
