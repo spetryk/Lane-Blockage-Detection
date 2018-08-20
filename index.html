@@ -6,16 +6,27 @@
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <title>Lane Blockage Detection</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="css/styles2.css?version=12">
+    <link rel="stylesheet" href="css/styles2.css?version=14">
 
     <link href="https://vjs.zencdn.net/7.0.3/video-js.css" rel="stylesheet">
     <script src="https://vjs.zencdn.net/7.0.3/video.js"></script>
+
+    <style>
+     /* Turn boxes */
+     .turnBox {
+       fill: red;
+       stroke: black;
+       stroke-width: 2;
+     }
+
+    </style>
+
   </head>
   <body>
 
     <div class="tab">
-      <button class="tablink" onclick="openCase('LTB', this)">Left Turn Blockage</button>
-      <button class="tablink" onclick="openCase('TQSB', this)" id="defaultOpen">Through Queue Spillback</button>
+      <button class="tablink" onclick="openCase('LTB', this)" id="defaultOpen">Left Turn Blockage</button>
+      <button class="tablink" onclick="openCase('TQSB', this)">Through Queue Spillback</button>
     </div>
 
     <div id="LTB" class="tabcontent">
@@ -28,7 +39,7 @@
         </p>
       </video>
       <div class="right" style="background-color:#bbb;">
-        <svg class="conclusionSVG" height="337.5" width="337.5"> </svg>
+        <svg class="conclusionSVG" height="400" width="1000"> </svg>
       </div>
     </div>
 
@@ -44,12 +55,44 @@
      var conclusions;
      var mapConclusions;
 
+     // Turn boxes
+     var currTurns = new Set();
+     var selected = 'green';
+     var unselected = 'red';
+
      var svg = d3.select(".conclusionSVG");
      var width = Number(svg.attr('width'));
      var height = Number(svg.attr('height'));
      svg.append('text').attr('class', 'conclusionText').attr('fill', 'black')
         .attr('x', width/2).attr('y', 50)
         .attr('text-anchor', 'middle');
+     svg.append('rect').attr('width', width).attr('height', height).attr('stroke', 'black')
+        .attr('stroke-width', 2).attr('fill', 'transparent');
+
+
+     var blockWidth = 150;
+     var blockHeight = 50;
+     var leftTurn = svg.append('g').attr('transform', 'translate(' + 100 + ',' + 100 + ')')
+                       .attr('class', 'turn, left');
+     leftTurn.append('rect').attr('class', 'turnBox leftTurnBox').attr('width', blockWidth).attr('height', blockHeight)
+
+
+     leftTurn.append('text').text('LEFT').attr('text-anchor', 'middle').attr('x', blockWidth / 2)
+             .attr('y', blockHeight / 2).attr('alignment-baseline', 'middle').attr('font-size', 20);
+
+
+     var through = svg.append('g').attr('transform', 'translate(' + ((width / 2) - (blockWidth / 2)) + ',' + 100 + ')')
+                      .attr('class', 'turn, through');
+     through.append('rect').attr('class', 'turnBox throughTurnBox').attr('width', blockWidth).attr('height', blockHeight)
+     through.append('text').text('THROUGH').attr('text-anchor', 'middle').attr('x', blockWidth / 2)
+            .attr('y', blockHeight / 2).attr('alignment-baseline', 'middle').attr('font-size', 20);
+
+     var right = svg.append('g').attr('transform', 'translate(' + ((width - blockWidth) - 100) + ',' + 100 + ')')
+                    .attr('class', 'turn, right');
+     right.append('rect').attr('class', 'turnBox rightTurnBox').attr('width', blockWidth).attr('height', blockHeight)
+     right.append('text').text('RIGHT').attr('text-anchor', 'middle').attr('x', blockWidth / 2)
+          .attr('y', blockHeight / 2).attr('alignment-baseline', 'middle').attr('font-size', 20);
+
 
      player.on('timeupdate', update);
      player.play();
@@ -65,8 +108,49 @@
        update_conclusion();
      }
 
+     /* Highlight box that corresponds to current conclusion.
+        conclusion: string of current conclusion from data. */
+     function updateTurnBox(conclusion) {
+       conclusion = conclusion.toLocaleLowerCase()
+       colorBox('left', conclusion);
+       colorBox('through', conclusion);
+       colorBox('right', conclusion);
 
-    // Load csv containing conclusions
+     }
+
+     /* Update currTurns and change turn box color.
+        turn:        string of turn, either 'left', 'through', or 'right'
+        conclusion:  lowercase string of current conclusion from data
+      */
+     function colorBox(turn, conclusion){
+       var box = d3.selectAll('.' + turn + 'TurnBox');
+       if (conclusion.includes(turn)){
+         currTurns.add(turn);
+         var box = d3.selectAll('.' + turn + 'TurnBox');
+         // If box not already active, make it active and transition its color
+         if (!box.classed('active')) {
+           box.classed('active', true);
+           box.transition()
+              .styleTween('fill', function () {
+                return d3.interpolate(unselected, selected)
+              })
+              .duration(650)
+         }
+       } else {
+         currTurns.delete(turn);
+         // If box was active, make it inactive and transition its color
+         if (box.classed('active')){
+           box.classed('active', false);
+           box.transition()
+              .styleTween('fill', function () {
+                return d3.interpolate(selected, unselected)
+              })
+              .duration(650)
+         }
+       }
+     }
+
+     // Load csv containing conclusions
      d3.queue()
        .defer(d3.csv, "Conclusions/tests/test_left_turn.csv", parseRow)
        .await(show_conclusions);
@@ -92,12 +176,12 @@
        if ("$" + curr_time in mapConclusions) {
          var entry = mapConclusions["$" + curr_time];
          d3.select('.conclusionText').text(entry.Conclusion);
+         updateTurnBox(entry.Conclusion);
        }
      }
 
 
      function openCase(caseName, elmnt){
-
        // Declare all variables
        var i, tabcontent, tablinks;
 
@@ -108,17 +192,19 @@
        }
 
        // Get all elements with class="tablinks" and remove the class "active"
-       tablinks = document.getElementsByClassName("tablinks");
+       tablinks = document.getElementsByClassName("tablink");
        for (i = 0; i < tablinks.length; i++) {
          tablinks[i].className = tablinks[i].className.replace(" active", "");
        }
 
        // Show the current tab, and add an "active" class to the button that opened the tab
        document.getElementById(caseName).style.display = "block";
-       evt.currentTarget.className += " active";
-
+       elmnt.className += " active";
 
      }
+
+     // Reset current turns
+     currTurns = new Set()
 
      // Get the element with id="defaultOpen" and click on it
      document.getElementById("defaultOpen").click();
