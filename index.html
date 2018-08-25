@@ -25,7 +25,7 @@
   <body>
 
     <div class="tab">
-      <button class="tablink" onclick="openCase('LTB', this)">Left Turn Blockage</button>
+      <button class="tablink" onclick="openCase('LTB', this)" id="defaultOpen">Left Turn Blockage</button>
       <button class="tablink" onclick="openCase('TQSB', this)">Through Queue Spillback</button>
     </div>
 
@@ -38,7 +38,7 @@
           <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
         </p>
       </video>
-      <svg class="conclusionSVG_LTB positioning" height="400" width="200"> </svg>
+      <svg class="conclusionSVG_LTB positioning" height="400" width="800"> </svg>
     </div>
 
     <div id="TQSB" class="tabcontent">
@@ -50,13 +50,9 @@
           <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
         </p>
       </video>
-      <svg class="conclusionSVG_TQSB positioning" height="400" width="500"> </svg>
+      <svg class="conclusionSVG_TQSB positioning" height="400" width="800"> </svg>
 
     </div>
-
-
-
-
 
     <script>
 
@@ -69,6 +65,7 @@
      var rightConclusions;
      var currentConclusions;
      var currTurns = new Set();
+     var currCase;
 
      // Turn box colors
      var selected = 'green';
@@ -113,24 +110,24 @@
        svg.append('rect').attr('width', width).attr('height', height).attr('stroke', 'black')
           .attr('stroke-width', 2).attr('fill', 'transparent');
 
-       var blockWidth = 150;
-       var blockHeight = 50;
-       var leftTurn = svg.append('g').attr('transform', 'translate(' + 100 + ',' + 100 + ')')
+       var blockWidth  = 150;
+       var blockHeight = 40;
+       var blockX      = 100 - (blockWidth / 2); // Middle of blocks in vertical column
+
+       var leftTurn = svg.append('g').attr('transform', 'translate(' + blockX  + ',' + (height * (1/3))  + ')')
                          .attr('class', 'turn left');
        leftTurn.append('rect').attr('class', 'turnBox leftTurnBox').attr('width', blockWidth).attr('height', blockHeight)
-
 
        leftTurn.append('text').text('LEFT').attr('text-anchor', 'middle').attr('x', blockWidth / 2)
                .attr('y', blockHeight / 2).attr('alignment-baseline', 'middle').attr('font-size', 20);
 
-
-       var through = svg.append('g').attr('transform', 'translate(' + ((width / 2) - (blockWidth / 2)) + ',' + 100 + ')')
+       var through = svg.append('g').attr('transform', 'translate(' + blockX  + ',' + (height * (1/2)) + ')')
                         .attr('class', 'turn, through');
        through.append('rect').attr('class', 'turnBox throughTurnBox').attr('width', blockWidth).attr('height', blockHeight)
        through.append('text').text('THROUGH').attr('text-anchor', 'middle').attr('x', blockWidth / 2)
               .attr('y', blockHeight / 2).attr('alignment-baseline', 'middle').attr('font-size', 20);
 
-       var right = svg.append('g').attr('transform', 'translate(' + ((width - blockWidth) - 100) + ',' + 100 + ')')
+       var right = svg.append('g').attr('transform', 'translate(' + blockX + ',' + (height * (2/3)) + ')')
                       .attr('class', 'turn, right');
        right.append('rect').attr('class', 'turnBox rightTurnBox').attr('width', blockWidth).attr('height', blockHeight)
        right.append('text').text('RIGHT').attr('text-anchor', 'middle').attr('x', blockWidth / 2)
@@ -184,7 +181,6 @@
        }
      }
 
-
      /**
       * Parse rows of file holding lane blockage conclusions at each time step.
       * Returns: array with entries as {Time:        (time in seconds);
@@ -212,6 +208,17 @@
      }
 
      function openCase(caseName, elmnt){
+       if (typeof(currCase) == 'undefined') {
+         currCase = caseName;
+       } else if (currCase == caseName){
+         // User clicked on tab twice in a row, ignore.
+         console.log('second time');
+         return;
+       } else {
+         // Update to new case
+         currCase = caseName;
+       }
+
        // Declare all variables
        var i, tabcontent, tablinks;
 
@@ -235,6 +242,8 @@
        newCase(caseName);
 
      }
+
+     console.log('after func');
 
      // Get the element with id="defaultOpen" and click on it
      //document.getElementById("defaultOpen").click();
