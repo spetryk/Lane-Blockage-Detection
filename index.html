@@ -14,9 +14,45 @@
     <style>
      /* Turn boxes */
      .turnBox {
-     fill: red;
+       fill: red;
        stroke: black;
        stroke-width: 2;
+     }
+
+     /* Slider */
+     .ticks {
+       font: 10px sans-serif;
+     }
+
+     .track,
+     .track-inset,
+     .track-overlay {
+       stroke-linecap: round;
+     }
+
+     .track {
+       stroke: #000;
+       stroke-opacity: 0.3;
+       stroke-width: 10px;
+     }
+
+     .track-inset {
+       stroke: #ddd;
+       stroke-width: 8px;
+     }
+
+     .track-overlay {
+       pointer-events: stroke;
+       stroke-width: 50px;
+       stroke: transparent;
+       cursor: crosshair;
+     }
+
+     .handle {
+       fill: #fff;
+       stroke: #000;
+       stroke-opacity: 0.5;
+       stroke-width: 1.25px;
      }
 
     </style>
@@ -65,7 +101,9 @@
      var rightConclusions;
      var currentConclusions;
      var currTurns = new Set();
+     var slider;
      var currCase;
+     var yScale;
 
      // Turn box colors
      var selected = 'green';
@@ -83,6 +121,8 @@
        duration = undefined;
        timeScale = undefined;
        mapConclusions = undefined;
+       slider = undefined;
+       yScale = undefined;
 
        // Load csv containing conclusions
        switch (caseName) {
@@ -110,9 +150,10 @@
        svg.append('rect').attr('width', width).attr('height', height).attr('stroke', 'black')
           .attr('stroke-width', 2).attr('fill', 'transparent');
 
+       /* Blocks colored by congested turn */
        var blockWidth  = 150;
        var blockHeight = 40;
-       var blockX      = 100 - (blockWidth / 2); // Middle of blocks in vertical column
+       var blockX      = (width / 2) - (blockWidth / 2); // Middle of blocks in vertical column
 
        var leftTurn = svg.append('g').attr('transform', 'translate(' + blockX  + ',' + (height * (1/3))  + ')')
                          .attr('class', 'turn left');
@@ -133,6 +174,39 @@
        right.append('text').text('RIGHT').attr('text-anchor', 'middle').attr('x', blockWidth / 2)
             .attr('y', blockHeight / 2).attr('alignment-baseline', 'middle').attr('font-size', 20);
 
+       /* Slider for level of congestion */
+       var sliderHeight = 300;
+       yScale = d3.scaleLinear()
+                  .domain([0, 100])
+                  .range([0, sliderHeight])
+                  .clamp(true);
+
+       slider = svg.append("g")
+                   .attr("class", "slider")
+                   .attr("transform", "translate(" + 50 + "," + ((height - sliderHeight) / 2) + ")");
+
+       slider.append("line")
+             .attr("class", "track")
+             .attr("y1", yScale.range()[0])
+             .attr("y2", yScale.range()[1])
+             .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+             .attr("class", "track-inset")
+             .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+             .attr("class", "track-overlay");
+
+       slider.insert("g", ".track-overlay")
+             .attr("class", "ticks")
+             .attr("transform", "translate(20,0)")
+             .selectAll("text")
+             .data(yScale.ticks(4))
+             .enter().append("text")
+             .attr("y", yScale)
+             .attr("text-anchor", "middle")
+             .text(d => d);
+
+       var handle = slider.insert("circle", ".track-overlay")
+                          .attr("class", "handle")
+                          .attr("r", 9);
 
        player.on('timeupdate', update_conclusion);
        player.play();
@@ -146,7 +220,6 @@
        colorBox('left', conclusion);
        colorBox('through', conclusion);
        colorBox('right', conclusion);
-
      }
 
      /* Update currTurns and change turn box color.
@@ -182,6 +255,21 @@
      }
 
      /**
+        Update slider position based on conclusion.
+      */
+     function updateSlider (conclusion) {
+       var match = conclusion.match(/(\d+\.\d+)/)
+       if (!(match == null)){
+         var pos = Number(match[0]);
+         console.log(pos);
+         d3.selectAll('.handle')
+           .transition()
+           .duration(650)
+           .attr('cy', yScale(pos));
+       }
+     }
+
+     /**
       * Parse rows of file holding lane blockage conclusions at each time step.
       * Returns: array with entries as {Time:        (time in seconds);
       *                                 Conclusion:  (conclusion as string)}
@@ -204,6 +292,7 @@
          var entry = mapConclusions["$" + curr_time];
          d3.selectAll('.conclusionText').text(entry.Conclusion);
          updateTurnBox(entry.Conclusion);
+         updateSlider(entry.Conclusion);
        }
      }
 
@@ -212,7 +301,6 @@
          currCase = caseName;
        } else if (currCase == caseName){
          // User clicked on tab twice in a row, ignore.
-         console.log('second time');
          return;
        } else {
          // Update to new case
@@ -242,8 +330,6 @@
        newCase(caseName);
 
      }
-
-     console.log('after func');
 
      // Get the element with id="defaultOpen" and click on it
      //document.getElementById("defaultOpen").click();
