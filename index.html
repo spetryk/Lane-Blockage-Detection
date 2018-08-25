@@ -6,7 +6,7 @@
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <title>Lane Blockage Detection</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="css/styles2.css?version=15">
+    <link rel="stylesheet" href="css/styles2.css?version=18">
 
     <link href="https://vjs.zencdn.net/7.0.3/video-js.css" rel="stylesheet">
     <script src="https://vjs.zencdn.net/7.0.3/video.js"></script>
@@ -29,33 +29,33 @@
       <button class="tablink" onclick="openCase('TQSB', this)">Through Queue Spillback</button>
     </div>
 
-    <div id="LTB" class="tabcontent">
+    <div id="LTB" class="tabcontent" style="background-color:gray;" >
       <h3> this is the left turn blockage</h3>
-      <video id="LTB" class="video-js" controls preload="auto" width="600" height="337.5" data-setup="{}">
+      <video id="LTB" class="video-js positioning" controls preload="auto" width="600" height="337.5" data-setup="{}">
         <source src="/Videos/LT-blockage-cropped.mp4" type='video/mp4'>
         <p class="vjs-no-js">
           To view this video please enable JavaScript, and consider upgrading to a web browser that
           <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
         </p>
       </video>
-      <div class="right" style="background-color:#bbb;">
-        <svg class="conclusionSVG_LTB" height="400" width="1000"> </svg>
-      </div>
+      <svg class="conclusionSVG_LTB positioning" height="400" width="200"> </svg>
     </div>
 
     <div id="TQSB" class="tabcontent">
       <h3> this is the through QSB</h3>
-      <video id="TQSB" class="video-js" controls preload="auto" width="600" height="337.5" data-setup="{}">
+      <video id="TQSB" class="video-js positioning" controls preload="auto" width="600" height="337.5" data-setup="{}">
         <source src="/Videos/TH-QSB-cropped.mp4" type='video/mp4'>
         <p class="vjs-no-js">
           To view this video please enable JavaScript, and consider upgrading to a web browser that
           <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
         </p>
       </video>
-      <div class="right" style="background-color:#bbb;">
-        <svg class="conclusionSVG_TQSB" height="400" width="1000"> </svg>
-      </div>
+      <svg class="conclusionSVG_TQSB positioning" height="400" width="500"> </svg>
+
     </div>
+
+
+
 
 
     <script>
@@ -116,7 +116,7 @@
        var blockWidth = 150;
        var blockHeight = 50;
        var leftTurn = svg.append('g').attr('transform', 'translate(' + 100 + ',' + 100 + ')')
-                         .attr('class', 'turn, left');
+                         .attr('class', 'turn left');
        leftTurn.append('rect').attr('class', 'turnBox leftTurnBox').attr('width', blockWidth).attr('height', blockHeight)
 
 

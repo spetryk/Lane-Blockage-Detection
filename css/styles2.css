@@ -1,5 +1,9 @@
 
-
+.positioning {
+    position: relative;
+    float: left;
+    margin: 10px;
+}
 
 
 /* Style tab links */
@@ -64,8 +68,8 @@
     border-top: none;
 }
 
-#LTB  {background-color: #EEEEEE;}
-#TQSB {background-color: green;}
+#LTB  {background-color: gray;}
+#TQSB {background-color: gray;}
 
 
 body {
