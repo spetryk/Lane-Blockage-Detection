@@ -153,10 +153,4 @@ strong {
 svg { border: solid #ccc 2px; }
 
 
-/* Turn boxes */
-.turnBox {
-    fill: red;
-    stroke: black;
-    stroke-width: 2;
-}
 
