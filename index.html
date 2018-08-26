@@ -4,14 +4,22 @@
   <head>
     <meta charset="utf-8">
     <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-color.v1.min.js"></script>
+    <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
     <title>Lane Blockage Detection</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/styles2.css?version=18">
-
     <link href="https://vjs.zencdn.net/7.0.3/video-js.css" rel="stylesheet">
     <script src="https://vjs.zencdn.net/7.0.3/video.js"></script>
 
     <style>
+
+     :root {
+       --top-color: red;
+       --bot-color: green;
+     }
+
+
      /* Turn boxes */
      .turnBox {
        fill: red;
@@ -24,28 +32,38 @@
        font: 10px sans-serif;
      }
 
-     .track,
-     .track-inset,
-     .track-overlay {
+     .topTrack {
+       stroke: var(--top-color);
+       stroke-width: 8px;
+       stroke-linecap: round;
+     }
+
+     .botTrack {
+       stroke: var(--bot-color);
+       stroke-width: 8px;
+       stroke-linecap: round;
+     }
+
+     /*.track,
+        .track-inset,
+        .track-overlay {
+        stroke-linecap: round;
+        }*/
+
+     .fullTrack {
+       stroke: #000;
+       stroke-opacity: 0.3;
+       stroke-width: 11px;
        stroke-linecap: round;
      }
 
      .track {
-       stroke: #000;
        stroke-opacity: 0.3;
        stroke-width: 10px;
      }
 
      .track-inset {
-       stroke: #ddd;
        stroke-width: 8px;
-     }
-
-     .track-overlay {
-       pointer-events: stroke;
-       stroke-width: 50px;
-       stroke: transparent;
-       cursor: crosshair;
      }
 
      .handle {
@@ -133,13 +151,12 @@
            currentConclusions = throughConclusions;
            break;
        }
-       if (isNaN(duration)){
-         duration = player.duration();
-         var timeMin = d3.min(currentConclusions, d => d.Time);
-         var timeMax = d3.max(currentConclusions, d => d.Time);
-         timeScale = d3.scaleLinear().domain([timeMin, timeMax]).range([0, duration]);
-         mapConclusions = d3.map(currentConclusions, d => d.videoTime = Math.round(timeScale(d.Time)));
-       }
+
+       duration = player.duration();
+       var timeMin = d3.min(currentConclusions, d => d.Time);
+       var timeMax = d3.max(currentConclusions, d => d.Time);
+       timeScale = d3.scaleLinear().domain([timeMin, timeMax]).range([0, duration]);
+       mapConclusions = d3.map(currentConclusions, d => d.videoTime = Math.round(timeScale(d.Time)));
 
        var svg = d3.select(".conclusionSVG_" + caseName);
        var width = Number(svg.attr('width'));
@@ -175,38 +192,89 @@
             .attr('y', blockHeight / 2).attr('alignment-baseline', 'middle').attr('font-size', 20);
 
        /* Slider for level of congestion */
-       var sliderHeight = 300;
+       var sliderHeightEnds = 50;
+       var sliderHeightMid  = 200;
        yScale = d3.scaleLinear()
                   .domain([0, 100])
-                  .range([0, sliderHeight])
+                  .range([0, sliderHeightMid])
                   .clamp(true);
+
+       var defs = svg.append("defs");
+
+       var gradient = defs.append("linearGradient")
+                          .attr("id", "svgGradient")
+                          .attr("x1", "0%")
+                          .attr("x2", "0%")
+                          .attr("y1", "0%")
+                          .attr("y2", "100%");
+
+       gradient.append("stop")
+               .attr('class', 'start')
+               .attr("offset", "0%")
+               .attr("stop-color", "red")
+               .attr("stop-opacity", 1);
+
+       gradient.append("stop")
+               .attr('class', 'end')
+               .attr("offset", "100%")
+               .attr("stop-color", "green")
+               .attr("stop-opacity", 1);
+
+       sliderFull = svg.append("g")
+                       .attr("class", "slider")
+                       .attr("transform", "translate(" + 50 + "," + (((height/2) - (sliderHeightMid/2)) - (sliderHeightEnds))  + ")");
+
+       sliderTop = svg.append("g")
+                      .attr("class", "slider")
+                      .attr("transform", "translate(" + 50 + "," + (((height/2) - (sliderHeightMid/2)) - (sliderHeightEnds)) + ")");
+
+       sliderBot = svg.append("g")
+                      .attr("class", "slider")
+                      .attr("transform", "translate(" + 50 + "," + ((height/2) + (sliderHeightMid/2))  + ")");
 
        slider = svg.append("g")
                    .attr("class", "slider")
-                   .attr("transform", "translate(" + 50 + "," + ((height - sliderHeight) / 2) + ")");
+                   .attr("transform", "translate(" + 50 + "," + ((height/2) - (sliderHeightMid/2)) + ")");
 
-       slider.append("line")
-             .attr("class", "track")
-             .attr("y1", yScale.range()[0])
-             .attr("y2", yScale.range()[1])
+       sliderFull.append("line")
+                 .attr("class", "fullTrack")
+                 .attr("y1", 0)
+                 .attr("y2", sliderHeightEnds * 2 + sliderHeightMid);
+
+       slider.append("rect")
+             .attr('class', 'track')
              .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
              .attr("class", "track-inset")
+             .attr("x", -4).attr("y", 0).attr("width", 8).attr("height", yScale.range()[1])
+             .attr("fill", "url(#svgGradient)")
              .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
-             .attr("class", "track-overlay");
+             .attr("class", "track-overlay")
+
+       sliderBot.append("line")
+             .attr("class", "botTrack")
+             .attr("y1", 0)
+             .attr("y2", sliderHeightEnds);
+
+
+       sliderTop.append("line")
+                .attr("class", "topTrack")
+                .attr("y1", 0)
+                .attr("y2", sliderHeightEnds)
 
        slider.insert("g", ".track-overlay")
-             .attr("class", "ticks")
-             .attr("transform", "translate(20,0)")
-             .selectAll("text")
-             .data(yScale.ticks(4))
-             .enter().append("text")
-             .attr("y", yScale)
-             .attr("text-anchor", "middle")
-             .text(d => d);
+                .attr("class", "ticks")
+                .attr("transform", "translate(20,0)")
+                .selectAll("text")
+                .data(yScale.ticks(4))
+                .enter().append("text")
+                .attr("y", yScale)
+                .attr("text-anchor", "middle")
+                .text(d => d);
 
        var handle = slider.insert("circle", ".track-overlay")
                           .attr("class", "handle")
-                          .attr("r", 9);
+                          .attr("r", 9)
+                          .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
 
        player.on('timeupdate', update_conclusion);
        player.play();
@@ -261,7 +329,6 @@
        var match = conclusion.match(/(\d+\.\d+)/)
        if (!(match == null)){
          var pos = Number(match[0]);
-         console.log(pos);
          d3.selectAll('.handle')
            .transition()
            .duration(650)
@@ -338,3 +405,4 @@
 
   </body>
 </html>
+
