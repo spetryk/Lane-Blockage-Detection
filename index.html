@@ -147,35 +147,50 @@
 
         <div id="LTB" class="tabcontent" style="background-color:gray;" >
           <h3> this is the left turn blockage</h3>
-          <video id="LTB" class="video-js positioning" controls preload="auto" width="600" height="337.5" data-setup="{}">
-            <source src="/Videos/LT-blockage-cropped.mp4" type='video/mp4'>
-            <p class="vjs-no-js">
-              To view this video please enable JavaScript, and consider upgrading to a web browser that
-              <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-            </p>
-          </video>
+          <div class="col-container">
+            <div class="col">
+              <video id="LTB" class="video-js positioning" controls preload="auto" width="600" height="337.5" data-setup="{}">
+                <source src="/Videos/LT-blockage-cropped.mp4" type='video/mp4'>
+                <p class="vjs-no-js">
+                  To view this video please enable JavaScript, and consider upgrading to a web browser that
+                  <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                </p>
+              </video>
+            </div>
+            <div class="col" id="svgLTB"></div>
+          </div>
         </div>
 
         <div id="TQSB" class="tabcontent">
           <h3> this is the through QSB</h3>
-          <video id="TQSB" class="video-js positioning" controls preload="auto" width="600" height="337.5" data-setup="{}">
-            <source src="/Videos/TH-QSB-cropped.mp4" type='video/mp4'>
-            <p class="vjs-no-js">
-              To view this video please enable JavaScript, and consider upgrading to a web browser that
-              <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-            </p>
-          </video>
+          <div class="col-container">
+            <div class="col">
+            <video id="TQSB" class="video-js positioning" controls preload="auto" width="600" height="337.5" data-setup="{}">
+              <source src="/Videos/TH-QSB-cropped.mp4" type='video/mp4'>
+              <p class="vjs-no-js">
+                To view this video please enable JavaScript, and consider upgrading to a web browser that
+                <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+              </p>
+            </video>
+            </div>
+            <div class="col" id="svgTQSB"></div>
+          </div>
         </div>
 
         <div id="UC" class="tabcontent" style="background-color:gray;">
           <h3> this is uncongested</h3>
-          <video id="UC" class="video-js positioning" controls preload="auto" width="600" height="337.5" data-setup="{}">
-            <source src="/Videos/Uncongested-cropped.mp4" type='video/mp4'>
-            <p class="vjs-no-js">
-              To view this video please enable JavaScript, and consider upgrading to a web browser that
-              <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-            </p>
-          </video>
+          <div class="col-container">
+            <div class="col">
+            <video id="UC" class="video-js positioning" controls preload="auto" width="600" height="337.5" data-setup="{}">
+              <source src="/Videos/Uncongested-cropped.mp4" type='video/mp4'>
+              <p class="vjs-no-js">
+                To view this video please enable JavaScript, and consider upgrading to a web browser that
+                <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+              </p>
+            </video>
+            </div>
+            <div class="col" id="svgTQSB"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -275,7 +290,7 @@
          document.getElementsByClassName("svgElem").remove();
        }
        // Add SVG
-       var svg = d3.select("#" + caseName).append("svg").attr("height", 400).attr("width", 800).attr("class", "svgElem positioning")
+       var svg = d3.select("#svg" + caseName).append("svg").attr("height", 400).attr("width", 800).attr("class", "svgElem positioning")
 
        var width = Number(svg.attr('width'));
        var height = Number(svg.attr('height'));
