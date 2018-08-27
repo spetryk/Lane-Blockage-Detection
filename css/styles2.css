@@ -1,4 +1,26 @@
 
+.header-bar {
+    background-color: #ccc;
+}
+
+.visualizationBkg {
+    background-color: white;
+}
+
+.bkgTextDiv {
+    width: 75%;
+    margin: 0 auto;
+}
+
+.bkgText {
+   line-height: 25px;
+}
+
+.visualization {
+    width: 75%;
+    margin: 0 auto;
+}
+
 .positioning {
     position: relative;
     float: left;

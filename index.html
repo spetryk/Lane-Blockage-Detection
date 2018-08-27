@@ -8,11 +8,39 @@
     <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
     <title>Lane Blockage Detection</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="css/styles2.css?version=18">
+    <link rel="stylesheet" href="css/styles2.css?version=21">
     <link href="https://vjs.zencdn.net/7.0.3/video-js.css" rel="stylesheet">
     <script src="https://vjs.zencdn.net/7.0.3/video.js"></script>
     <!-- Fonts -->
     <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet'>
+
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet'>
+    <!-- Le styles -->
+    <link rel="stylesheet" href="/lib/css/bootstrap.min.css">
+
+    <!-- Prototype styles -->
+    <link rel="stylesheet" href="/lib/css/nav.css">
+    <link rel="stylesheet" href="/lib/css/layout.css">
+    <link rel="stylesheet" href="/lib/css/typography.css">
+    <link rel="stylesheet" href="/lib/css/components.css">
+    <link rel="stylesheet" href="/lib/css/infographics.css">
+    <link rel="stylesheet" href="/lib/css/utils.css">
+    <link rel="stylesheet" href="/lib/css/entypo.css">
+
+    <!-- Owl stylesheets -->
+    <link rel="stylesheet" href="/lib/css/owl.carousel.css">
+    <link rel="stylesheet" href="/lib/css/owl.theme.css">
+
+    <!-- Yamm! Menus -->
+    <link rel="stylesheet" href="/lib/css/yamm.css">
+
+    <!-- Site Specific CSS -->
+    <link rel="stylesheet" href="/lib/css/site.css">
+
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/lib/css/custom.css">
+
+
     <style>
 
      :root {
@@ -82,44 +110,96 @@
   </head>
   <body>
 
-    <div class="tab">
-      <button class="tablink" onclick="openCase('LTB', this)" id="defaultOpen">Left Turn Blockage</button>
-      <button class="tablink" onclick="openCase('TQSB', this)">Through Queue Spillback</button>
-      <button class="tablink" onclick="openCase('UC', this)">Uncongested Traffic</button>
+    <header id="site-header" class="subbrand light">
+      <div class="navbar navbar-default navbar-static-top yamm">
+        <div class="container"> <a href="http://berkeley.edu" class="home-link">UC Berkeley</a>
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header two-line-logo"><br>
+            <h1><img src="/img/berkeleyLogo.png" alt="Berkeley Logo" style="width:200px;height:70px;"><span class="dept-title two-line-logo">California PATH<br>
+              Lane Blockage Detection</span></h1>
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-nav"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+          </div>
+        </div><br>
+        <!-- /.container-fluid -->
+      </div>
+    </header>
+
+    <section class="header-bar">
+      <div class="container">
+    	<h2>Lane Blockage Detection Visualization</h2>
+      </div>
+    </section>
+
+    <div class="visualizationBkg">
+      <div class="bkgTextDiv">
+        <h4 class="bkgText">
+          Information about visualization
+        </h4>
+        <p class="lead"> Testing out lead text font</p>
+      </div>
+
+      <div class="visualization">
+        <div class="tab">
+          <button class="tablink" onclick="openCase('LTB', this)" id="defaultOpen">Left Turn Blockage</button>
+          <button class="tablink" onclick="openCase('TQSB', this)">Through Queue Spillback</button>
+          <button class="tablink" onclick="openCase('UC', this)">Uncongested Traffic</button>
+        </div>
+
+        <div id="LTB" class="tabcontent" style="background-color:gray;" >
+          <h3> this is the left turn blockage</h3>
+          <video id="LTB" class="video-js positioning" controls preload="auto" width="600" height="337.5" data-setup="{}">
+            <source src="/Videos/LT-blockage-cropped.mp4" type='video/mp4'>
+            <p class="vjs-no-js">
+              To view this video please enable JavaScript, and consider upgrading to a web browser that
+              <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+            </p>
+          </video>
+        </div>
+
+        <div id="TQSB" class="tabcontent">
+          <h3> this is the through QSB</h3>
+          <video id="TQSB" class="video-js positioning" controls preload="auto" width="600" height="337.5" data-setup="{}">
+            <source src="/Videos/TH-QSB-cropped.mp4" type='video/mp4'>
+            <p class="vjs-no-js">
+              To view this video please enable JavaScript, and consider upgrading to a web browser that
+              <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+            </p>
+          </video>
+        </div>
+
+        <div id="UC" class="tabcontent" style="background-color:gray;">
+          <h3> this is uncongested</h3>
+          <video id="UC" class="video-js positioning" controls preload="auto" width="600" height="337.5" data-setup="{}">
+            <source src="/Videos/Uncongested-cropped.mp4" type='video/mp4'>
+            <p class="vjs-no-js">
+              To view this video please enable JavaScript, and consider upgrading to a web browser that
+              <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+            </p>
+          </video>
+        </div>
+      </div>
     </div>
 
-    <div id="LTB" class="tabcontent" style="background-color:gray;" >
-      <h3> this is the left turn blockage</h3>
-      <video id="LTB" class="video-js positioning" controls preload="auto" width="600" height="337.5" data-setup="{}">
-        <source src="/Videos/LT-blockage-cropped.mp4" type='video/mp4'>
-        <p class="vjs-no-js">
-          To view this video please enable JavaScript, and consider upgrading to a web browser that
-          <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-        </p>
-      </video>
-    </div>
+    <footer id="universal-footer">
+      <div class="container">
+	<div class="row">
+	  <div class="col-xs-6 col-sm-4 col-md-3">
+	    <div class="block logo">
+	      <a href="http://www.berkeley.edu/"><img src="/lib/img/logo-ucberkeley-white.png" alt="University of California Berkeley"></a>
+	    </div>
 
-    <div id="TQSB" class="tabcontent">
-      <h3> this is the through QSB</h3>
-      <video id="TQSB" class="video-js positioning" controls preload="auto" width="600" height="337.5" data-setup="{}">
-        <source src="/Videos/TH-QSB-cropped.mp4" type='video/mp4'>
-        <p class="vjs-no-js">
-          To view this video please enable JavaScript, and consider upgrading to a web browser that
-          <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-        </p>
-      </video>
-    </div>
+	  </div>
+	  <div class="col-xs-12 col-sm-8 col-md-9">
 
-    <div id="UC" class="tabcontent" style="background-color:gray;">
-      <h3> this is uncongested</h3>
-      <video id="UC" class="video-js positioning" controls preload="auto" width="600" height="337.5" data-setup="{}">
-        <source src="/Videos/Uncongested-cropped.mp4" type='video/mp4'>
-        <p class="vjs-no-js">
-          To view this video please enable JavaScript, and consider upgrading to a web browser that
-          <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-        </p>
-      </video>
-    </div>
+	    <div class="copyright">
+
+	      Copyright &copy;  2018  UC Regents; all rights reserved
+	    </div>
+	  </div>
+	</div>
+
+      </div>
+    </footer>
 
     <script>
 
@@ -213,7 +293,6 @@
           .attr("font-size", 30)
           .attr("text-anchor", "middle")
           .style("text-shadow", "0 0 3px red");
-
 
 
        var blockWidth  = 110;
@@ -328,7 +407,6 @@
        sliderMid.insert("text").attr("class", "handleText").attr("x", 15).attr("text-anchor", "start");
 
        player.on('timeupdate', update_conclusion);
-       player.play();
 
      }
 
@@ -481,6 +559,9 @@
      //document.getElementById("defaultOpen").click();
 
     </script>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 
   </body>
 </html>
