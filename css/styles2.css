@@ -13,10 +13,8 @@
     min-width: 1400px;
 }
 
-
-
 .header-bar {
-    background-color: #ccc;
+    background-color: #B9D3B6;
 }
 
 .visualizationBkg {
@@ -50,7 +48,8 @@ video {
 /* Style tab links */
 .tablink {
   background-color: #555;
-  color: white;
+  color: #003262;
+  font-family: Arvo, serif;
   float: left;
   border: none;
   outline: none;
@@ -76,7 +75,7 @@ video {
 .tab {
     overflow: hidden;
     border: 1px solid #ccc;
-    background-color: #f1f1f1;
+    background-color: #B9D3B6;
 }
 
 /* Style the buttons that are used to open the tab content */
@@ -92,7 +91,7 @@ video {
 
 /* Change background color of buttons on hover */
 .tab button:hover {
-    background-color: #ddd;
+    background-color: #859438;
 }
 
 /* Create an active/current tablink class */
@@ -106,7 +105,7 @@ video {
     padding: 6px 12px;
     border: 1px solid #ccc;
     border-top: none;
-    background-color: #FEFFE7;
+    background-color: #EEEEEE;
 }
 
 body {
