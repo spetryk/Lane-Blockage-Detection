@@ -8,7 +8,7 @@
     <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
     <title>Lane Blockage Detection</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="css/styles2.css?version=21">
+    <link rel="stylesheet" href="css/styles2.css?version=24">
     <link href="https://vjs.zencdn.net/7.0.3/video-js.css" rel="stylesheet">
     <script src="https://vjs.zencdn.net/7.0.3/video.js"></script>
     <!-- Fonts -->
@@ -43,12 +43,6 @@
 
     <style>
 
-     :root {
-       --top-color: red;
-       --bot-color: green;
-     }
-
-
      /* Turn boxes */
      .turnBox {
        fill: #ccc;
@@ -59,7 +53,7 @@
        opacity: 0.5;
      }
      .turnBoxText {
-       font-family: 'Ubuntu', sans-serif;
+       font-family: 'Open sans', sans-serif;
        font-size: 30px;
        text-anchor: middle;
        alignment-baseline: middle;
@@ -72,30 +66,29 @@
 
      /* Slider */
      .ticks {
-       font: 10px sans-serif;
+       font: 14px 'Open sans', sans-serif;
+       fill: #003262;
      }
 
      .topTrack {
-       stroke: var(--top-color);
-       stroke-width: 8px;
+       stroke-width: 15px;
        stroke-linecap: round;
      }
 
      .botTrack {
-       stroke: var(--bot-color);
-       stroke-width: 8px;
+       stroke-width: 15px;
        stroke-linecap: round;
      }
 
      .fullTrack {
-       stroke: #000;
-       stroke-opacity: 0.3;
-       stroke-width: 11px;
+       stroke: #003262;
+       stroke-opacity: 1;
+       stroke-width: 17px;
        stroke-linecap: round;
      }
 
      .track-inset {
-       stroke-width: 8px;
+       stroke-width: 15px;
      }
 
      .handle {
@@ -103,6 +96,12 @@
        stroke: #000;
        stroke-opacity: 0.5;
        stroke-width: 1.25px;
+     }
+
+     .handleText {
+       text-anchor: start;
+       alignment-baseline: middle;
+       font-size: 16px;
      }
 
     </style>
@@ -140,12 +139,12 @@
 
       <div class="visualization">
         <div class="tab">
-          <button class="tablink" onclick="openCase('LTB', this)" id="defaultOpen">Left Turn Blockage</button>
-          <button class="tablink" onclick="openCase('TQSB', this)">Through Queue Spillback</button>
-          <button class="tablink" onclick="openCase('UC', this)">Uncongested Traffic</button>
+          <button class="tablink buttonLTB" onclick="openCase('LTB', this)" id="defaultOpen">Left Turn Blockage</button>
+          <button class="tablink buttonTQSB" onclick="openCase('TQSB', this)">Through Queue Spillback</button>
+          <button class="tablink buttonUC" onclick="openCase('UC', this)">Uncongested Traffic</button>
         </div>
 
-        <div id="LTB" class="tabcontent" style="background-color:gray;" >
+        <div id="LTB" class="tabcontent">
           <h3> this is the left turn blockage</h3>
           <div class="col-container">
             <div class="col">
@@ -165,31 +164,31 @@
           <h3> this is the through QSB</h3>
           <div class="col-container">
             <div class="col">
-            <video id="TQSB" class="video-js positioning" controls preload="auto" width="600" height="337.5" data-setup="{}">
-              <source src="/Videos/TH-QSB-cropped.mp4" type='video/mp4'>
-              <p class="vjs-no-js">
-                To view this video please enable JavaScript, and consider upgrading to a web browser that
-                <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-              </p>
-            </video>
+              <video id="TQSB" class="video-js positioning" controls preload="auto" width="600" height="337.5" data-setup="{}">
+                <source src="/Videos/TH-QSB-cropped.mp4" type='video/mp4'>
+                <p class="vjs-no-js">
+                  To view this video please enable JavaScript, and consider upgrading to a web browser that
+                  <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                </p>
+              </video>
             </div>
             <div class="col" id="svgTQSB"></div>
           </div>
         </div>
 
-        <div id="UC" class="tabcontent" style="background-color:gray;">
+        <div id="UC" class="tabcontent">
           <h3> this is uncongested</h3>
           <div class="col-container">
             <div class="col">
-            <video id="UC" class="video-js positioning" controls preload="auto" width="600" height="337.5" data-setup="{}">
-              <source src="/Videos/Uncongested-cropped.mp4" type='video/mp4'>
-              <p class="vjs-no-js">
-                To view this video please enable JavaScript, and consider upgrading to a web browser that
-                <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-              </p>
-            </video>
+              <video id="UC" class="video-js positioning" controls preload="auto" width="600" height="337.5" data-setup="{}">
+                <source src="/Videos/Uncongested-cropped.mp4" type='video/mp4'>
+                <p class="vjs-no-js">
+                  To view this video please enable JavaScript, and consider upgrading to a web browser that
+                  <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                </p>
+              </video>
             </div>
-            <div class="col" id="svgTQSB"></div>
+            <div class="col" id="svgUC"></div>
           </div>
         </div>
       </div>
@@ -290,7 +289,7 @@
          document.getElementsByClassName("svgElem").remove();
        }
        // Add SVG
-       var svg = d3.select("#svg" + caseName).append("svg").attr("height", 400).attr("width", 800).attr("class", "svgElem positioning")
+       var svg = d3.select("#svg" + caseName).append("svg").attr("height", 400).attr("width", 600).attr("class", "svgElem positioning")
 
        var width = Number(svg.attr('width'));
        var height = Number(svg.attr('height'));
@@ -302,44 +301,53 @@
 
        /* Blocks colored by congested turn*/
 
-       var defs = svg.append("defs");
-
        /* svg.append("text").text("FOOO").attr("x", 100).attr("y", 100)
         *    .attr("font-size", 30)
         *    .attr("text-anchor", "middle")
         *    .style("text-shadow", "0 0 3px red");*/
 
-       var blockWidth  = 110;
-       var blockHeight = 75;
-       var blockX      = (width / 2) - (blockWidth / 2); // Middle of blocks in vertical column
+       var blockWidthLeft  = 90;
+       var blockWidthThru  = 150;
+       var blockWidthRight  = 100;
+       var blockWidthQSB  = 150;
+       var blockHeight = 50;
+       var blockX      = width / 2; // Middle of blocks in vertical column
 
-       var leftTurn = svg.append('g').attr('transform', 'translate(' + blockX  + ',' + (height * (1/4))  + ')')
+       var leftTurn = svg.append('g').attr('transform', 'translate(' + (blockX - (blockWidthLeft / 2)) + ',' + (height * (1/4))  + ')')
                          .attr('class', 'turn left');
-       leftTurn.append('rect').attr('class', 'turnBox leftTurnBox').attr('width', blockWidth).attr('height', blockHeight)
-       leftTurn.append('text').text('LEFT').attr("class", "turnBoxText").attr('x', blockWidth / 2).attr('y', blockHeight / 2)
+       leftTurn.append('rect').attr('class', 'turnBox leftTurnBox').attr('width', blockWidthLeft).attr('height', blockHeight)
+       leftTurn.append('text').text('LEFT').attr("class", "turnBoxText").attr('x', blockWidthLeft / 2).attr('y', blockHeight / 2)
 
-       var through = svg.append('g').attr('transform', 'translate(' + blockX  + ',' + (height * (1/2)) + ')')
+
+       var through = svg.append('g').attr('transform', 'translate(' + (blockX - (blockWidthThru/2))  + ',' + (height * (1/2)) + ')')
                         .attr('class', 'turn, through');
-       through.append('rect').attr('class', 'turnBox throughTurnBox').attr('width', blockWidth).attr('height', blockHeight)
-       through.append('text').text('THROUGH').attr("class", "turnBoxText").attr('x', blockWidth / 2).attr('y', blockHeight / 2)
+       through.append('rect').attr('class', 'turnBox throughTurnBox').attr('width', blockWidthThru).attr('height',  blockHeight)
+       through.append('text').text('THROUGH').attr("class", "turnBoxText").attr('x', blockWidthThru / 2).attr('y', blockHeight / 2)
 
-       var right = svg.append('g').attr('transform', 'translate(' + blockX + ',' + (height * (3/4)) + ')')
+       var right = svg.append('g').attr('transform', 'translate(' + (blockX - (blockWidthRight/2)) + ',' + (height * (3/4)) + ')')
                       .attr('class', 'turn, right');
-       right.append('rect').attr('class', 'turnBox rightTurnBox').attr('width', blockWidth).attr('height', blockHeight)
-       right.append('text').text('RIGHT').attr("class", "turnBoxText").attr('x', blockWidth / 2).attr('y', blockHeight / 2)
+       right.append('rect').attr('class', 'turnBox rightTurnBox').attr('width', blockWidthRight).attr('height', blockHeight)
+       right.append('text').text('RIGHT').attr("class", "turnBoxText").attr('x', blockWidthRight / 2).attr('y', blockHeight / 2);
 
        /* Box indicating queue spillback */
-       var qsb = svg.append('g').attr('transform', 'translate(' + ((width * (4/5)) - (blockWidth/2)) + ',' + (height * (1/2)) + ')')
+       var qsb = svg.append('g').attr('transform', 'translate(' + ((width * (4/5)) - (blockWidthQSB/2)) + ',' + (height * (1/2)) + ')')
                     .attr('class', 'qsb');
-       qsb.append('rect').attr('class', 'turnBox qsbBox').attr('width', blockWidth).attr('height', blockHeight)
-       qsb.append('text').text('QUEUE').attr("class", "turnBoxText").attr('x', blockWidth / 2).attr('y', blockHeight *(1/3))
-       qsb.append('text').text('SPILLBACK').attr("class", "turnBoxText").attr('x', blockWidth / 2).attr('y', blockHeight *(2/3))
+       qsb.append('rect').attr('class', 'turnBox qsbBox').attr('width', blockWidthQSB).attr('height', 120)
+       qsb.append('text').text('QUEUE').attr("class", "turnBoxText").attr('x', blockWidthQSB / 2).attr('y', 140*(1/4) + 5)
+       qsb.append('text').text('SPILL').attr("class", "turnBoxText").attr('x', blockWidthQSB / 2).attr('y', 140*(2/4))
+       qsb.append('text').text('BACK').attr("class", "turnBoxText").attr('x', blockWidthQSB / 2).attr('y',  140*(3/4) - 5)
 
        /* Slider for level of congestion */
        yScale = d3.scaleLinear()
                   .domain([0, 100])
                   .range([sliderHeightMid, 0])
                   .clamp(true);
+
+       var congestedColor   = '#CB0000';
+       var uncongestedColor = '#e3e5d8';
+       //var uncongestedColor = '#D9DD92';
+
+       var defs = svg.append("defs");
 
        var gradient = defs.append("linearGradient")
                           .attr("id", "svgGradient")
@@ -351,30 +359,32 @@
        gradient.append("stop")
                .attr('class', 'start')
                .attr("offset", "0%")
-               .attr("stop-color", "red")
+               .attr("stop-color", congestedColor)
                .attr("stop-opacity", 1);
 
        gradient.append("stop")
                .attr('class', 'end')
                .attr("offset", "100%")
-               .attr("stop-color", "green")
+               .attr("stop-color", uncongestedColor)
                .attr("stop-opacity", 1);
+
+       var sliderX = 75;
 
        var sliderBkg = svg.append("g")
                           .attr("class", "slider sliderBkg")
-                          .attr("transform", "translate(" + 50 + "," + (((height/2) - (sliderHeightMid/2)) - (sliderHeightEnds))  + ")");
+                          .attr("transform", "translate(" + sliderX + "," + (((height/2) - (sliderHeightMid/2)) - (sliderHeightEnds))  + ")");
 
        var sliderTop = svg.append("g")
                           .attr("class", "slider sliderTop")
-                          .attr("transform", "translate(" + 50 + "," + (((height/2) - (sliderHeightMid/2)) - (sliderHeightEnds)) + ")");
+                          .attr("transform", "translate(" + sliderX + "," + (((height/2) - (sliderHeightMid/2)) - (sliderHeightEnds)) + ")");
 
        var sliderBot = svg.append("g")
                           .attr("class", "sliderBot")
-                          .attr("transform", "translate(" + 50 + "," + ((height/2) + (sliderHeightMid/2))  + ")");
+                          .attr("transform", "translate(" + sliderX + "," + ((height/2) + (sliderHeightMid/2))  + ")");
 
        var sliderMid = svg.append("g")
                           .attr("class", "sliderMid")
-                          .attr("transform", "translate(" + 50 + "," + ((height/2) - (sliderHeightMid/2)) + ")");
+                          .attr("transform", "translate(" + sliderX + "," + ((height/2) - (sliderHeightMid/2)) + ")");
 
        sliderBkg.append("line")
                 .attr("class", "fullTrack")
@@ -390,17 +400,19 @@
        sliderBot.append("line")
                 .attr("class", "botTrack")
                 .attr("y1", 0)
-                .attr("y2", sliderHeightEnds);
+                .attr("y2", sliderHeightEnds)
+                .attr('stroke', uncongestedColor);
 
        sliderTop.append("line")
                 .attr("class", "topTrack")
                 .attr("y1", 0)
                 .attr("y2", sliderHeightEnds)
+                .attr('stroke', congestedColor);
 
        d3.select(".track-inset")
-                .append("rect")
-                .attr("x", -4).attr("y", 0).attr("width", 8).attr("height", yScale.range()[0])
-                .attr("fill", "url(#svgGradient)");
+         .append("rect")
+         .attr("x", -7.5).attr("y", 0).attr("width", 15).attr("height", yScale.range()[0])
+         .attr("fill", "url(#svgGradient)");
 
        d3.select(".track-overlay")
          .append("g")
@@ -411,14 +423,26 @@
          .enter().append("text")
          .attr("y", yScale)
          .attr("text-anchor", "end")
+         .attr("alignment-baseline", "middle")
          .text(d => d + " %");
+
+       d3.select(".ticks")
+         .append("g")
+         .attr("class", "tickMarks")
+         .selectAll("line")
+         .data(yScale.ticks(4))
+         .enter().append("line")
+         .attr("x1", 5).attr("x2", 10)
+         .attr("y1", yScale).attr("y2", yScale)
+         .attr("stroke-width", 2)
+         .attr("stroke", "black")
 
        var handle = d3.select(".track-overlay")
                       .append("circle")
                       .attr("class", "handle")
                       .attr("r", 9);
 
-       sliderMid.insert("text").attr("class", "handleText").attr("x", 15).attr("text-anchor", "start");
+       sliderMid.insert("text").attr("class", "handleText").attr("x", 15);
 
        player.on('timeupdate', update_conclusion);
 
@@ -492,17 +516,18 @@
        }
        else {
          pos = 0;
-         txt = "foo";
+         txt = "";
        }
        d3.selectAll('.handle')
          .transition()
          .duration(500)
          .attr('cy', pos);
        d3.selectAll('.handleText')
+         .text(txt)
          .transition()
          .duration(500)
-         .attr('y', pos)
-         .text(txt);
+         .attr('y', pos);
+
      }
 
      /**
