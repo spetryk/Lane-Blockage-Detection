@@ -59,8 +59,9 @@
        text-anchor: middle;
        alignment-baseline: middle;
        font-weight: bold;
-       stroke: black;
+       stroke: #888888;
        stroke-width: 1px;
+       stroke-dasharray: 4 2 ;
        fill: transparent;
        letter-spacing: 0.1em;
      }
@@ -249,6 +250,10 @@
        .defer(d3.csv, "Conclusions/tests/test_uncongested.csv", parseRow)
        .await(set_conclusions);
 
+     var congestedColor   = '#CB0000';
+     var uncongestedColor = '#e3e5d8';
+     var unselected       = '#888888';
+
      function newCase(caseName) {
        // Reset variables
        player = videojs(caseName);
@@ -301,12 +306,6 @@
           .attr('stroke-width', 2).attr('fill', 'transparent');
 
        /* Blocks colored by congested turn*/
-
-       /* svg.append("text").text("FOOO").attr("x", 100).attr("y", 100)
-        *    .attr("font-size", 30)
-        *    .attr("text-anchor", "middle")
-        *    .style("text-shadow", "0 0 3px red");*/
-
        var blockWidthLeft  = 100;
        var blockWidthThru  = 190;
        var blockWidthRight  = 125;
@@ -316,37 +315,31 @@
 
        var leftTurn = svg.append('g').attr('transform', 'translate(' + (blockX - (blockWidthLeft / 2)) + ',' + (height * (1/5) - (blockHeight/2))  + ')')
                          .attr('class', 'turn left');
-       leftTurn.append('rect').attr('class', 'turnBox leftTurnBox').attr('width', blockWidthLeft).attr('height', blockHeight)
+       //leftTurn.append('rect').attr('class', 'turnBox leftTurnBox').attr('width', blockWidthLeft).attr('height', blockHeight)
        leftTurn.append('text').text('LEFT').attr("class", "turnBoxText leftText").attr('x', blockWidthLeft / 2).attr('y', blockHeight / 2)
 
 
        var through = svg.append('g').attr('transform', 'translate(' + (blockX - (blockWidthThru/2))  + ',' + (height * (2/5) - (blockHeight/2)) + ')')
                         .attr('class', 'turn, through');
-       through.append('rect').attr('class', 'turnBox throughTurnBox').attr('width', blockWidthThru).attr('height',  blockHeight)
+       //through.append('rect').attr('class', 'turnBox throughTurnBox').attr('width', blockWidthThru).attr('height',  blockHeight)
        through.append('text').text('THROUGH').attr("class", "turnBoxText throughText").attr('x', blockWidthThru / 2).attr('y', blockHeight / 2)
 
        var right = svg.append('g').attr('transform', 'translate(' + (blockX - (blockWidthRight/2)) + ',' + (height * (3/5) - (blockHeight/2)) + ')')
                       .attr('class', 'turn, right');
-       right.append('rect').attr('class', 'turnBox rightTurnBox').attr('width', blockWidthRight).attr('height', blockHeight)
+       //right.append('rect').attr('class', 'turnBox rightTurnBox').attr('width', blockWidthRight).attr('height', blockHeight)
        right.append('text').text('RIGHT').attr("class", "turnBoxText rightText").attr('x', blockWidthRight / 2).attr('y', blockHeight / 2);
 
        /* Box indicating queue spillback */
        var qsb = svg.append('g').attr('transform', 'translate(' + (blockX - (blockWidthQSB/2)) + ',' + (height * (4/5)) + ')')
                     .attr('class', 'qsb');
-       qsb.append('text').text('QUEUE SPILLBACK').style("font-size", "25px").attr("class", "turnBoxText").attr('x', blockWidthQSB / 2).attr('y', 0)
-       /* qsb.append('rect').attr('class', 'turnBox qsbBox').attr('width', blockWidthQSB).attr('height', 120)*/
-       /* qsb.append('text').text('SPILL').attr("class", "turnBoxText").attr('x', blockWidthQSB / 2).attr('y', 140*(2/4))
-        * qsb.append('text').text('BACK').attr("class", "turnBoxText").attr('x', blockWidthQSB / 2).attr('y',  140*(3/4) - 5)*/
+       qsb.append('text').text('QUEUE SPILLBACK').style("font-size", "25px").attr("class", "turnBoxText qsbText").attr('x', blockWidthQSB / 2).attr('y', 0)
+
 
        /* Slider for level of congestion */
        yScale = d3.scaleLinear()
                   .domain([0, 100])
                   .range([sliderHeightMid, 0])
                   .clamp(true);
-
-       var congestedColor   = '#CB0000';
-       var uncongestedColor = '#e3e5d8';
-       //var uncongestedColor = '#D9DD92';
 
        var defs = svg.append("defs");
 
@@ -463,154 +456,183 @@
         conclusion:  lowercase string of current conclusion from data
       */
      function colorBox(turn, conclusion){
-       var box = d3.selectAll('.' + turn + 'TurnBox');
-       var txt = d3.selectAll(turn + "Text");
+       //var box = d3.selectAll('.' + turn + 'TurnBox');
+       var txt = d3.selectAll('.' + turn + 'Text');
        if (conclusion.includes(turn)){
          currTurns.add(turn);
-         var box = d3.selectAll('.' + turn + 'TurnBox');
-         // If box not already active, make it active and transition its color
-         if (!box.classed('active')) {
-           box.classed('active', true);
-           box.transition()
-              .styleTween('fill', function () {
-                return d3.interpolate(unselected, selected)
-              })
-              .duration(650)
-           txt.style("text-shadow", "0 0 3px red");
-           txt.style("font-size", "30px");
+         //var box = d3.selectAll('.' + turn + 'TurnBox');
+         // If text not already active, make it active and transition its color
+         if (!txt.classed('active')) {
+           /* box.classed('active', true);
+            * box.transition()
+            *    .styleTween('fill', function () {
+            *      return d3.interpolate(unselected, selected)
+            *    })
+            *    .duration(650)*/
+           txt.transition()
+              .duration(500)
+              .style("stroke", congestedColor)
+              .style("text-shadow", "0 0 7px red")
+              .style("fill", "red")
+              .style("font-size", "40px");
          }
        } else {
          currTurns.delete(turn);
-         // If box was active, make it inactive and transition its color
-         if (box.classed('active')){
-           box.classed('active', false);
-           box.transition()
-              .styleTween('fill', function () {
-                return d3.interpolate(selected, unselected)
-              })
-              .duration(650)
-           txt.style("text-shadow", "0 0 0px red");
-           txt.style("font-size", "14px");
+         // If text was active, make it inactive and transition its color
+         if (txt.classed('active')){
+           /* box.classed('active', false);
+            * box.transition()
+            *    .styleTween('fill', function () {
+            *      return d3.interpolate(selected, unselected)
+            *    })
+            *    .duration(650)*/
+           txt.transition()
+              .duration(500)
+              .style("text-shadow", "0 0 0px transparent")
+              .style("font-size", "30px")
+              .style("fill", "transparent")
+              .style("stroke", " #003262");
          }
        }
-
-
-
-     }
-
-     /**
-        Update slider position based on conclusion.
-      */
-     function updateSlider (conclusion) {
-       var lower = conclusion.toLocaleLowerCase()
-       var pos;
-       var txt;
-       // Congested state
-       var matchPercent = lower.match(/(\d+\.\d+)/)
-       if (!(matchPercent == null)){
-         var percent = Number(matchPercent[0])
-         pos = yScale(percent);
-         if (percent < 33.33) {
-           txt = "Light Congestion";
-         } else if (percent < 66.66) {
-           txt = "Moderate Congestion";
-         } else if (percent < 100.0) {
-           txt = "Heavy Congestion";
-         } else {
-           txt = "";
+       var qsb = d3.select(".qsbText");
+       if (conclusion.includes("queue spillback")) {
+         if (!qsb.classed('active')) {
+           qsb.classed('active', true);
+           var qsbText = d3.selectAll(".qsbText");
+           qsbText.transition()
+                  .duration(500)
+                  .style("text-shadow", "0 0 7px red")
+                  .style("font-size", "30px")
+                  .style("fill", "red")
+                  .style("stroke", congestedColor);
          }
-       }
-       // Uncongested state
-       else if (lower.includes("no lane blockage")){
-         pos = yScale(0) + (sliderHeightEnds / 2);
-         txt = "Uncongested";
-       }
-       // Lane Blockage
-       else if (lower.includes("lane blockage")){
-         pos = yScale(100) - (sliderHeightEnds / 2);
-         txt = "Lane Blockage";
        }
        else {
-         pos = 0;
-         txt = "";
-       }
-       d3.selectAll('.handle')
-         .transition()
-         .duration(500)
-         .attr('cy', pos);
-       d3.selectAll('.handleText')
-         .text(txt)
-         .transition()
-         .duration(500)
-         .attr('y', pos);
-     }
-
-     /**
-      * Parse rows of file holding lane blockage conclusions at each time step.
-      * Returns: array with entries as {Time:        (time in seconds);
-      *                                 Conclusion:  (conclusion as string)}
-      */
-     function parseRow(row){
-       row.Time = Number(row["Time (s)"]);
-       row.Conclusion = row["Conclusion"];
-       return row;
-     }
-
-     /* Store data from csv reads into variables */
-     function set_conclusions(error, leftConclusion, throughConclusion, uncongestedConclusion) {
-       leftConclusions        = leftConclusion;
-       throughConclusions     = throughConclusion;
-       uncongestedConclusions = uncongestedConclusion;
-     }
-
-     /* Update conclusion text on page to match current traffic condition. */
-     function update_conclusion() {
-       var curr_time = Math.round(player.currentTime());
-       if ("$" + curr_time in mapConclusions) {
-         var entry = mapConclusions["$" + curr_time];
-         d3.selectAll('.conclusionText').text(entry.Conclusion);
-         updateTurnBox(entry.Conclusion);
-         updateSlider(entry.Conclusion);
+         if (qsb.classed('active')){
+           qsb.classed('active', false);
+           qsb.transition()
+              .duration(500)
+              .style("text-shadow", "0 0 0px transparent")
+              .style("font-size", "25px")
+              .style("fill", "transparent")
+              .style("stroke", " #003262");
+         }
        }
      }
 
-     function openCase(caseName, elmnt){
-       if (typeof(currCase) == 'undefined') {
-         currCase = caseName;
-       } else if (currCase == caseName){
-         // User clicked on tab twice in a row, ignore.
-         return;
-       } else {
-         // Update to new case
-         currCase = caseName;
+       /**
+          Update slider position based on conclusion.
+        */
+       function updateSlider (conclusion) {
+         var lower = conclusion.toLocaleLowerCase()
+         var pos;
+         var txt;
+         // Congested state
+         var matchPercent = lower.match(/(\d+\.\d+)/)
+         if (!(matchPercent == null)){
+           var percent = Number(matchPercent[0])
+           pos = yScale(percent);
+           if (percent < 33.33) {
+             txt = "Light Congestion";
+           } else if (percent < 66.66) {
+             txt = "Moderate Congestion";
+           } else if (percent < 100.0) {
+             txt = "Heavy Congestion";
+           } else {
+             txt = "";
+           }
+         }
+         // Uncongested state
+         else if (lower.includes("no lane blockage")){
+           pos = yScale(0) + (sliderHeightEnds / 2);
+           txt = "Uncongested";
+         }
+         // Lane Blockage
+         else if (lower.includes("lane blockage")){
+           pos = yScale(100) - (sliderHeightEnds / 2);
+           txt = "Lane Blockage";
+         }
+         else {
+           pos = 0;
+           txt = "";
+         }
+         d3.selectAll('.handle')
+           .transition()
+           .duration(500)
+           .attr('cy', pos);
+         d3.selectAll('.handleText')
+           .text(txt)
+           .transition()
+           .duration(500)
+           .attr('y', pos);
        }
 
-       // Declare all variables
-       var i, tabcontent, tablinks;
-
-       // Get all elements with class="tabcontent" and hide them
-       tabcontent = document.getElementsByClassName("tabcontent");
-       for (i = 0; i < tabcontent.length; i++) {
-         tabcontent[i].style.display = "none";
+       /**
+        * Parse rows of file holding lane blockage conclusions at each time step.
+        * Returns: array with entries as {Time:        (time in seconds);
+        *                                 Conclusion:  (conclusion as string)}
+        */
+       function parseRow(row){
+         row.Time = Number(row["Time (s)"]);
+         row.Conclusion = row["Conclusion"];
+         return row;
        }
 
-       // Get all elements with class="tablinks" and remove the class "active"
-       tablinks = document.getElementsByClassName("tablink");
-       for (i = 0; i < tablinks.length; i++) {
-         tablinks[i].className = tablinks[i].className.replace(" active", "");
+       /* Store data from csv reads into variables */
+       function set_conclusions(error, leftConclusion, throughConclusion, uncongestedConclusion) {
+         leftConclusions        = leftConclusion;
+         throughConclusions     = throughConclusion;
+         uncongestedConclusions = uncongestedConclusion;
        }
 
-       // Show the current tab, and add an "active" class to the button that opened the tab
-       document.getElementById(caseName).style.display = "block";
-       elmnt.className += " active";
+       /* Update conclusion text on page to match current traffic condition. */
+       function update_conclusion() {
+         var curr_time = Math.round(player.currentTime());
+         if ("$" + curr_time in mapConclusions) {
+           var entry = mapConclusions["$" + curr_time];
+           d3.selectAll('.conclusionText').text(entry.Conclusion);
+           updateTurnBox(entry.Conclusion);
+           updateSlider(entry.Conclusion);
+         }
+       }
 
-       // Display new video player, SVG, correct data
-       newCase(caseName);
+       function openCase(caseName, elmnt){
+         if (typeof(currCase) == 'undefined') {
+           currCase = caseName;
+         } else if (currCase == caseName){
+           // User clicked on tab twice in a row, ignore.
+           return;
+         } else {
+           // Update to new case
+           currCase = caseName;
+         }
 
-     }
+         // Declare all variables
+         var i, tabcontent, tablinks;
 
-     // Get the element with id="defaultOpen" and click on it
-     //document.getElementById("defaultOpen").click();
+         // Get all elements with class="tabcontent" and hide them
+         tabcontent = document.getElementsByClassName("tabcontent");
+         for (i = 0; i < tabcontent.length; i++) {
+           tabcontent[i].style.display = "none";
+         }
+
+         // Get all elements with class="tablinks" and remove the class "active"
+         tablinks = document.getElementsByClassName("tablink");
+         for (i = 0; i < tablinks.length; i++) {
+           tablinks[i].className = tablinks[i].className.replace(" active", "");
+         }
+
+         // Show the current tab, and add an "active" class to the button that opened the tab
+         document.getElementById(caseName).style.display = "block";
+         elmnt.className += " active";
+
+         // Display new video player, SVG, correct data
+         newCase(caseName);
+
+       }
+
+       // Get the element with id="defaultOpen" and click on it
+       //document.getElementById("defaultOpen").click();
 
     </script>
 
