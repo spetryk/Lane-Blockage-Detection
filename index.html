@@ -8,7 +8,7 @@
     <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
     <title>Lane Blockage Detection</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="css/styles2.css?version=30">
+    <link rel="stylesheet" href="css/styles.css?version=30">
     <link href="https://vjs.zencdn.net/7.0.3/video-js.css" rel="stylesheet">
     <script src="https://vjs.zencdn.net/7.0.3/video.js"></script>
     <!-- Fonts -->
@@ -108,6 +108,12 @@
        fill: #003262;
      }
 
+     .annotation {
+       font-size: 20px;
+       text-anchor: middle;
+       font-family: Open sans, sans-serif
+     }
+
     </style>
 
   </head>
@@ -130,7 +136,6 @@
       <div class="container">
     	<h2 style="font-family:Arvo, sans-serif">Lane Blockage Detection Visualization</h2>
       </div>
-    </section>
 
     <div class="visualizationBkg">
       <div class="bkgTextDiv">
@@ -148,7 +153,7 @@
         </div>
 
         <div id="LTB" class="tabcontent">
-          <h3> this is the left turn blockage</h3>
+          <h4> this is the left turn blockage</h4>
           <div class="col-container">
             <div class="col">
               <video id="LTB" class="video-js positioning" controls preload="auto" width="600" height="337.5" data-setup="{}">
@@ -164,7 +169,7 @@
         </div>
 
         <div id="TQSB" class="tabcontent">
-          <h3> this is the through QSB</h3>
+          <h4> this is the through QSB</h4>
           <div class="col-container">
             <div class="col">
               <video id="TQSB" class="video-js positioning" controls preload="auto" width="600" height="337.5" data-setup="{}">
@@ -198,7 +203,7 @@
       <br>
     </div>
 
-
+    </section>
 
     <footer id="universal-footer">
       <div class="container">
@@ -300,11 +305,11 @@
          document.getElementsByClassName("svgElem").remove();
        }
        // Add SVG
-       var svg = d3.select("#svg" + caseName).append("svg").attr("height", 500).attr("width", 600).attr("class", "svgElem positioning")
+       var svg = d3.select("#svg" + caseName).append("svg").attr("height", 500).attr("width", 600).attr("class", "svgElem positioning");
        var width = Number(svg.attr('width'));
        var height = Number(svg.attr('height'));
-       svg.append('rect').attr('width', width).attr('height', height).attr('stroke', 'black')
-          .attr('stroke-width', 2).attr('fill', 'transparent');
+       /* svg.append('rect').attr('width', width).attr('height', height).attr('stroke', 'black')
+        *    .attr('stroke-width', 2).attr('fill', 'transparent');*/
 
        /* Blocks colored by congested turn*/
        var blockWidthLeft  = 100;
@@ -314,13 +319,19 @@
        var blockHeight = 50;
        var blockX      = width * 0.72;
 
+       var newHeight = height + 55;
+
        var turns = svg.append("g")
-                      .attr("transform", "translate(" + 0 + "," + ((height - 400) / 2) + ")");
+                      .attr("transform", "translate(" + 0 + "," + ((newHeight - 400) / 2) + ")");
        var turnsHeight = 400;
 
+       var turnsText = turns.append("text").attr("class", "annotation").attr("x", blockX).attr("y", 4).text("Congested");
+       turns.append("text").attr("class", "annotation").attr("x", blockX).attr("y", 29).text("Traffic Movement");
+
+
        var leftTurn = turns.append('g')
-                         .attr('transform', 'translate(' + (blockX - (blockWidthLeft / 2)) + ',' + (turnsHeight * (1/5) - (blockHeight/2))  + ')')
-                         .attr('class', 'turn left');
+                           .attr('transform', 'translate(' + (blockX - (blockWidthLeft / 2)) + ',' + (turnsHeight * (1/5) - (blockHeight/2))  + ')')
+                           .attr('class', 'turn left');
        leftTurn.append('text')
                .text('LEFT')
                .attr("class", "turnBoxText leftText")
@@ -328,8 +339,8 @@
                .attr('y', blockHeight / 2)
 
        var through = turns.append('g')
-                        .attr('transform', 'translate(' + (blockX - (blockWidthThru/2))  + ',' + (turnsHeight * (2/5) - (blockHeight/2)) + ')')
-                        .attr('class', 'turn, through');
+                          .attr('transform', 'translate(' + (blockX - (blockWidthThru/2))  + ',' + (turnsHeight * (2/5) - (blockHeight/2)) + ')')
+                          .attr('class', 'turn, through');
        through.append('text')
               .text('THROUGH')
               .attr("class", "turnBoxText throughText")
@@ -337,8 +348,8 @@
               .attr('y', blockHeight / 2)
 
        var right = turns.append('g')
-                      .attr('transform', 'translate(' + (blockX - (blockWidthRight/2)) + ',' + (turnsHeight * (3/5) - (blockHeight/2)) + ')')
-                      .attr('class', 'turn, right');
+                        .attr('transform', 'translate(' + (blockX - (blockWidthRight/2)) + ',' + (turnsHeight * (3/5) - (blockHeight/2)) + ')')
+                        .attr('class', 'turn, right');
        right.append('text')
             .text('RIGHT')
             .attr("class", "turnBoxText rightText")
@@ -347,8 +358,8 @@
 
        /* Box indicating queue spillback */
        var qsb = turns.append('g')
-                    .attr('transform', 'translate(' + (blockX - (blockWidthQSB/2)) + ',' + (turnsHeight * (4/5)) + ')')
-                    .attr('class', 'qsb');
+                      .attr('transform', 'translate(' + (blockX - (blockWidthQSB/2)) + ',' + (turnsHeight * (4/5)) + ')')
+                      .attr('class', 'qsb');
        qsb.append('text')
           .text('QUEUE SPILLBACK')
           .style("font-size", "25px")
@@ -387,19 +398,24 @@
 
        var sliderBkg = svg.append("g")
                           .attr("class", "slider sliderBkg")
-                          .attr("transform", "translate(" + sliderX + "," + (((height/2) - (sliderHeightMid/2)) - (sliderHeightEnds))  + ")");
+                          .attr("transform", "translate(" + sliderX + "," + (((newHeight/2) - (sliderHeightMid/2)) - (sliderHeightEnds))  + ")");
 
        var sliderTop = svg.append("g")
                           .attr("class", "slider sliderTop")
-                          .attr("transform", "translate(" + sliderX + "," + (((height/2) - (sliderHeightMid/2)) - (sliderHeightEnds)) + ")");
+                          .attr("transform", "translate(" + sliderX + "," + (((newHeight/2) - (sliderHeightMid/2)) - (sliderHeightEnds)) + ")");
 
        var sliderBot = svg.append("g")
                           .attr("class", "sliderBot")
-                          .attr("transform", "translate(" + sliderX + "," + ((height/2) + (sliderHeightMid/2))  + ")");
+                          .attr("transform", "translate(" + sliderX + "," + ((newHeight/2) + (sliderHeightMid/2))  + ")");
 
        var sliderMid = svg.append("g")
                           .attr("class", "sliderMid")
-                          .attr("transform", "translate(" + sliderX + "," + ((height/2) - (sliderHeightMid/2)) + ")");
+                          .attr("transform", "translate(" + sliderX + "," + ((newHeight/2) - (sliderHeightMid/2)) + ")");
+
+       /* Text on top of slider */
+       var sliderText = d3.select(".sliderTop").append("g");
+       sliderText.append("text").text("Congestion").attr("class", "annotation").attr("y", -50);
+       sliderText.append("text").text("Level").attr("y", -25).attr("class", "annotation");
 
        sliderBkg.append("line")
                 .attr("class", "fullTrack")
@@ -458,6 +474,9 @@
                       .attr("r", 9);
 
        sliderMid.insert("text").attr("class", "handleText").attr("x", 20);
+
+       /* Move all elements down slightly to align with video */
+       //svg.selectAll("*").attr("transform", "translate(0, 50)");
 
        player.on('timeupdate', update_conclusion);
        player.on('end', resetTurns);
@@ -623,27 +642,27 @@
          currCase = caseName;
        }
 
-     // Declare all variables
-     var i, tabcontent, tablinks;
+       // Declare all variables
+       var i, tabcontent, tablinks;
 
-     // Get all elements with class="tabcontent" and hide them
-     tabcontent = document.getElementsByClassName("tabcontent");
-     for (i = 0; i < tabcontent.length; i++) {
-       tabcontent[i].style.display = "none";
-     }
+       // Get all elements with class="tabcontent" and hide them
+       tabcontent = document.getElementsByClassName("tabcontent");
+       for (i = 0; i < tabcontent.length; i++) {
+         tabcontent[i].style.display = "none";
+       }
 
-     // Get all elements with class="tablinks" and remove the class "active"
-     tablinks = document.getElementsByClassName("tablink");
-     for (i = 0; i < tablinks.length; i++) {
-       tablinks[i].className = tablinks[i].className.replace(" active", "");
-     }
+       // Get all elements with class="tablinks" and remove the class "active"
+       tablinks = document.getElementsByClassName("tablink");
+       for (i = 0; i < tablinks.length; i++) {
+         tablinks[i].className = tablinks[i].className.replace(" active", "");
+       }
 
-     // Show the current tab, and add an "active" class to the button that opened the tab
-     document.getElementById(caseName).style.display = "block";
-     elmnt.className += " active";
+       // Show the current tab, and add an "active" class to the button that opened the tab
+       document.getElementById(caseName).style.display = "block";
+       elmnt.className += " active";
 
-     // Display new video player, SVG, correct data
-     newCase(caseName);
+       // Display new video player, SVG, correct data
+       newCase(caseName);
 
      }
 
