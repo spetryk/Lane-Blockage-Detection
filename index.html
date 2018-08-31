@@ -128,7 +128,6 @@
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-nav"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
           </div>
         </div><br>
-        <!-- /.container-fluid -->
       </div>
     </header>
 
@@ -144,10 +143,13 @@
         <h4 class="bkgText">
           This work extends from research under the <a href="https://path.berkeley.edu/"><u>California Partners for Advanced Transportation
           Technology</u></a> in addition to <a href="http://bayen.eecs.berkeley.edu/"><u>Prof. Alexandre Bayen's</u></a> lab at UC Berkeley.
+          <br><br>
+          The widely used Highway Capacity Manual published by the Transportation Research Board provides metrics for determining the traffic delay and level of service (LOS) at signalized intersections. However, the calculations of delay and LOS do not take into account interactions between traffic movements or queue spillback from the downstream. The occurrence of lane blockages or queue spillback can severely diminish accuracy of the delay and LOS estimates.
+          <br><br>
 
-          The widely used Highway Capacity Manual published by the Transportation Research Board provides metrics for determining the traffic delay and level of service (LOS) at signalized intersections. However, the calculations of delay and LOS do not take into account interactions between traffic movements or queue spillback from the downstream. The occurrence of lane blockages or queue spillback can severely diminish  accuracy of the delay and LOS estimates.
+          The study combines data from loop detectors and the road geometry to categorize the current traffic condition. However, it goes beyond the simple indication of congestion: it can also predict the formation of a lane blockage. In this scenario, cars attempting to make a turn cannot approach the intersection due to congestion from a different traffic movement. Thus, even though the turn light is green, little to no cars can actually make the turn. If traffic signal plans do not take these into account, they will wrongly assume a lower level of congestion.
 
-          The study combines data from loop detectors and the road geometry to categorize the current traffic condition. However, it goes beyond the simple categorization of congestion: it can also predict the formation of a lane blockage, a scenario overlooked 
+A lane blockage is illustrated in the image below: the red cars are attempting to turn left, yet are blocked by congestion from the through and right turn movements.
         </h4>
         <br>
         <p class="lead">Visualization</p>
