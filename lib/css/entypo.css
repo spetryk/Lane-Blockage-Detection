@@ -1,0 +1,407 @@
+@font-face {
+  font-family: 'entypo';
+  src: url('/lib/fonts/fontello.eot?94279212');
+  src: url('/lib/fonts/fontello.eot?94279212#iefix') format('embedded-opentype'),
+       url('/lib/fonts/fontello.woff?94279212') format('woff'),
+       url('/lib/fonts/fontello.ttf?94279212') format('truetype'),
+       url('/lib/fonts/fontello.svg?94279212#fontello') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+ 
+/* Chrome hack: SVG is rendered more smooth in Windozze. 100% magic, uncomment if you need it. */
+/* Note, that will break hinting! In other OS-es font will be not as sharp as it could be */
+/*
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: 'fontello';
+    src: url('/fonts/fontello.svg?94279212#fontello') format('svg');
+  }
+}
+*/
+ 
+.entypo {
+	font-family: 'entypo';
+	font-size: 1em;
+	font-weight: normal;
+	line-height: 0;
+}
+ 
+.entypo-social {
+	font-family: 'entypo';
+	font-size: 1em;
+	font-weight: normal;
+	line-height: 0;
+}
+ 
+.entypo-social.twitter:before { content: '\e800'; } /* 'î €' */
+.entypo-social.facebook:before { content: '\e801'; } /* 'î ' */
+.entypo-social.gplus:before { content: '\e803'; } /* 'î ƒ' */
+.entypo-social.instagram:before { content: '\e804'; } /* 'î „' */
+.entypo-social.pinterest:before { content: '\e805'; } /* 'î …' */
+.entypo-social.linkedin:before { content: '\e806'; } /* 'î †' */
+
+
+.entypo.map:before { content: '\e807'; } /* 'î ‡' */
+.entypo.mail:before { content: '\e808'; } /* 'î ˆ' */
+.entypo.user:before { content: '\e809'; } /* 'î ‰' */
+.entypo.users:before { content: '\e80a'; } /* 'î Š' */
+.entypo.video:before { content: '\e80b'; } /* 'î ‹' */
+.entypo.play:before { content: '\e80c'; } /* 'î Œ' */
+.entypo.stop:before { content: '\e80d'; } /* 'î ' */
+.entypo.pause:before { content: '\e80e'; } /* 'î Ž' */
+.entypo.record:before { content: '\e80f'; } /* 'î ' */
+.entypo.popup:before { content: '\e810'; } /* 'î ' */
+.entypo.search:before { content: '\e802'; } /* 'î ‚' */
+
+
+
+
+
+.entypo-social.sweden:before { content: '\e898'; } /* 'î¢˜' */
+.entypo-social.smashing:before { content: '\e899'; } /* 'î¢™' */
+.entypo-social.logo-db:before { content: '\e89a'; } /* 'î¢š' */
+.entypo-social.spotify-circled:before { content: '\e89b'; } /* 'î¢›' */
+.entypo-social.spotify:before { content: '\e89c'; } /* 'î¢œ' */
+.entypo-social.rdio-circled:before { content: '\e89d'; } /* 'î¢' */
+.entypo-social.rdio:before { content: '\e89e'; } /* 'î¢ž' */
+.entypo-social.qq:before { content: '\e89f'; } /* 'î¢Ÿ' */
+.entypo-social.instagram:before { content: '\e8a0'; } /* 'î¢ ' */
+.entypo-social.dropbox:before { content: '\e8a1'; } /* 'î¢¡' */
+.entypo-social.evernote:before { content: '\e8a2'; } /* 'î¢¢' */
+.entypo-social.flattr:before { content: '\e8a3'; } /* 'î¢£' */
+.entypo-social.skype:before { content: '\e8a4'; } /* 'î¢¤' */
+.entypo-social.skype-circled:before { content: '\e8a5'; } /* 'î¢¥' */
+.entypo-social.renren:before { content: '\e8a6'; } /* 'î¢¦' */
+.entypo-social.sina-weibo:before { content: '\e8a7'; } /* 'î¢§' */
+.entypo-social.paypal:before { content: '\e8a8'; } /* 'î¢¨' */
+.entypo-social.picasa:before { content: '\e8a9'; } /* 'î¢©' */
+.entypo-social.mixi:before { content: '\e8aa'; } /* 'î¢ª' */
+.entypo-social.behance:before { content: '\e8ab'; } /* 'î¢«' */
+.entypo-social.soundcloud:before { content: '\e8ac'; } /* 'î¢¬' */
+.entypo-social.google-circles:before { content: '\e8ad'; } /* 'î¢­' */
+.entypo-social.vkontakte:before { content: '\e8ae'; } /* 'î¢®' */
+.entypo-social.lastfm-circled:before { content: '\e8af'; } /* 'î¢¯' */
+.entypo-social.lastfm:before { content: '\e8b0'; } /* 'î¢°' */
+.entypo-social.stumbleupon-circled:before { content: '\e8b1'; } /* 'î¢±' */
+.entypo-social.stumbleupon:before { content: '\e8b2'; } /* 'î¢²' */
+.entypo-social.dribbble-circled:before { content: '\e8b3'; } /* 'î¢³' */
+.entypo-social.dribbble:before { content: '\e8b4'; } /* 'î¢´' */
+.entypo-social.linkedin-circled:before { content: '\e8b5'; } /* 'î¢µ' */
+.entypo-social.linkedin:before { content: '\e8b6'; } /* 'î¢¶' */
+.entypo-social.tumblr-circled:before { content: '\e8b7'; } /* 'î¢·' */
+.entypo-social.tumblr:before { content: '\e8b8'; } /* 'î¢¸' */
+.entypo-social.pinterest-circled:before { content: '\e8b9'; } /* 'î¢¹' */
+.entypo-social.pinterest:before { content: '\e8ba'; } /* 'î¢º' */
+.entypo-social.gplus-circled:before { content: '\e8bb'; } /* 'î¢»' */
+.entypo-social.gplus:before { content: '\e8bc'; } /* 'î¢¼' */
+.entypo-social.facebook-squared:before { content: '\e8bd'; } /* 'î¢½' */
+.entypo-social.facebook-circled:before { content: '\e8be'; } /* 'î¢¾' */
+.entypo-social.facebook:before { content: '\e8bf'; } /* 'î¢¿' */
+.entypo-social.twitter-circled:before { content: '\e8c0'; } /* 'î£€' */
+.entypo-social.twitter:before { content: '\e8c1'; } /* 'î£' */
+.entypo-social.vimeo-circled:before { content: '\e8c2'; } /* 'î£‚' */
+.entypo-social.vimeo:before { content: '\e8c3'; } /* 'î£ƒ' */
+.entypo-social.flickr-circled:before { content: '\e8c4'; } /* 'î£„' */
+.entypo-social.flickr:before { content: '\e8c5'; } /* 'î£…' */
+.entypo-social.github-circled:before { content: '\e8c6'; } /* 'î£†' */
+.entypo-social.github:before { content: '\e8c7'; } /* 'î£‡' */
+
+
+
+.entypo.plus-circled:before { content: '\e800'; } /* 'î €' */
+.entypo.mail:before { content: '\e801'; } /* 'î ' */
+.entypo.search:before { content: '\e802'; } /* 'î ‚' */
+.entypo.heart:before { content: '\e803'; } /* 'î ƒ' */
+.entypo.heart-empty:before { content: '\e804'; } /* 'î „' */
+.entypo.star:before { content: '\e805'; } /* 'î …' */
+.entypo.star-empty:before { content: '\e806'; } /* 'î †' */
+.entypo.user:before { content: '\e807'; } /* 'î ‡' */
+.entypo.users:before { content: '\e808'; } /* 'î ˆ' */
+.entypo.user-add:before { content: '\e809'; } /* 'î ‰' */
+.entypo.camera:before { content: '\e80a'; } /* 'î Š' */
+.entypo.picture:before { content: '\e80b'; } /* 'î ‹' */
+.entypo.video:before { content: '\e80c'; } /* 'î Œ' */
+.entypo.layout:before { content: '\e80d'; } /* 'î ' */
+.entypo.menu:before { content: '\e80e'; } /* 'î Ž' */
+.entypo.check:before { content: '\e80f'; } /* 'î ' */
+.entypo.cancel:before { content: '\e810'; } /* 'î ' */
+.entypo.cancel-circled:before { content: '\e811'; } /* 'î ‘' */
+.entypo.plus-squared:before { content: '\e812'; } /* 'î ’' */
+.entypo.left-open-big:before { content: '\e813'; } /* 'î “' */
+.entypo.chevron-thin-left:before { content: '\e813'; } /* 'î “' */
+.entypo.right-open-big:before { content: '\e814'; } /* 'î ”' */
+.entypo.chevron-thin-right:before { content: '\e814'; } /* 'î “' */
+.entypo.up-open-big:before { content: '\e815'; } /* 'î •' */
+.entypo.down-open-big:before { content: '\e816'; } /* 'î –' */
+.entypo.up-open-mini:before { content: '\e817'; } /* 'î —' */
+.entypo.right-open-mini:before { content: '\e818'; } /* 'î ˜' */
+.entypo.left-open-mini:before { content: '\e819'; } /* 'î ™' */
+.entypo.lamp:before { content: '\e81a'; } /* 'î š' */
+.entypo.chat:before { content: '\e81b'; } /* 'î ›' */
+.entypo.bell:before { content: '\e81c'; } /* 'î œ' */
+.entypo.attention:before { content: '\e81d'; } /* 'î ' */
+.entypo.flag:before { content: '\e81e'; } /* 'î ž' */
+.entypo.bookmarks:before { content: '\e81f'; } /* 'î Ÿ' */
+.entypo.bookmark:before { content: '\e820'; } /* 'î  ' */
+.entypo.thumbs-up:before { content: '\e821'; } /* 'î ¡' */
+.entypo.thumbs-down:before { content: '\e822'; } /* 'î ¢' */
+.entypo.download:before { content: '\e823'; } /* 'î £' */
+.entypo.upload:before { content: '\e824'; } /* 'î ¤' */
+.entypo.upload-cloud:before { content: '\e825'; } /* 'î ¥' */
+.entypo.minus:before { content: '\e826'; } /* 'î ¦' */
+.entypo.minus-circled:before { content: '\e827'; } /* 'î §' */
+.entypo.plus:before { content: '\e828'; } /* 'î ¨' */
+.entypo.cancel-squared:before { content: '\e829'; } /* 'î ©' */
+.entypo.minus-squared:before { content: '\e82a'; } /* 'î ª' */
+.entypo.help:before { content: '\e82b'; } /* 'î «' */
+.entypo.help-circled:before { content: '\e82c'; } /* 'î ¬' */
+.entypo.info:before { content: '\e82d'; } /* 'î ­' */
+.entypo.info-circled:before { content: '\e82e'; } /* 'î ®' */
+.entypo.back:before { content: '\e82f'; } /* 'î ¯' */
+.entypo.home:before { content: '\e830'; } /* 'î °' */
+.entypo.link:before { content: '\e831'; } /* 'î ±' */
+.entypo.attach:before { content: '\e832'; } /* 'î ²' */
+.entypo.lock:before { content: '\e833'; } /* 'î ³' */
+.entypo.lock-open:before { content: '\e834'; } /* 'î ´' */
+.entypo.eye:before { content: '\e835'; } /* 'î µ' */
+.entypo.tag:before { content: '\e836'; } /* 'î ¶' */
+.entypo.retweet:before { content: '\e837'; } /* 'î ·' */
+.entypo.print:before { content: '\e838'; } /* 'î ¸' */
+.entypo.feather:before { content: '\e839'; } /* 'î ¹' */
+.entypo.pencil:before { content: '\e83a'; } /* 'î º' */
+.entypo.export:before { content: '\e83b'; } /* 'î »' */
+.entypo.code:before { content: '\e83c'; } /* 'î ¼' */
+.entypo.quote:before { content: '\e83d'; } /* 'î ½' */
+.entypo.forward:before { content: '\e83e'; } /* 'î ¾' */
+.entypo.reply-all:before { content: '\e83f'; } /* 'î ¿' */
+.entypo.reply:before { content: '\e840'; } /* 'î¡€' */
+.entypo.keyboard:before { content: '\e841'; } /* 'î¡' */
+.entypo.comment:before { content: '\e842'; } /* 'î¡‚' */
+.entypo.alert:before { content: '\e843'; } /* 'î¡ƒ' */
+.entypo.vcard:before { content: '\e844'; } /* 'î¡„' */
+.entypo.address:before { content: '\e845'; } /* 'î¡…' */
+.entypo.location:before { content: '\e846'; } /* 'î¡†' */
+.entypo.map:before { content: '\e847'; } /* 'î¡‡' */
+.entypo.direction:before { content: '\e848'; } /* 'î¡ˆ' */
+.entypo.compass:before { content: '\e849'; } /* 'î¡‰' */
+.entypo.cup:before { content: '\e84a'; } /* 'î¡Š' */
+.entypo.trash:before { content: '\e84b'; } /* 'î¡‹' */
+.entypo.doc:before { content: '\e84c'; } /* 'î¡Œ' */
+.entypo.docs:before { content: '\e84d'; } /* 'î¡' */
+.entypo.doc-text-inv:before { content: '\e84e'; } /* 'î¡Ž' */
+.entypo.newspaper:before { content: '\e84f'; } /* 'î¡' */
+.entypo.book-open:before { content: '\e850'; } /* 'î¡' */
+.entypo.book:before { content: '\e851'; } /* 'î¡‘' */
+.entypo.hourglass:before { content: '\e852'; } /* 'î¡’' */
+.entypo.clock:before { content: '\e853'; } /* 'î¡“' */
+.entypo.volume:before { content: '\e854'; } /* 'î¡”' */
+.entypo.sound:before { content: '\e855'; } /* 'î¡•' */
+.entypo.mute:before { content: '\e856'; } /* 'î¡–' */
+.entypo.mic:before { content: '\e857'; } /* 'î¡—' */
+.entypo.logout:before { content: '\e858'; } /* 'î¡˜' */
+.entypo.login:before { content: '\e859'; } /* 'î¡™' */
+.entypo.calendar:before { content: '\e85a'; } /* 'î¡š' */
+.entypo.bag:before { content: '\e85b'; } /* 'î¡›' */
+.entypo.basket:before { content: '\e85c'; } /* 'î¡œ' */
+.entypo.shareable:before { content: '\e85d'; } /* 'î¡' */
+.entypo.share:before { content: '\e85e'; } /* 'î¡ž' */
+.entypo.tools:before { content: '\e85f'; } /* 'î¡Ÿ' */
+.entypo.cog:before { content: '\e860'; } /* 'î¡ ' */
+.entypo.phone:before { content: '\e861'; } /* 'î¡¡' */
+.entypo.rss:before { content: '\e862'; } /* 'î¡¢' */
+.entypo.box:before { content: '\e863'; } /* 'î¡£' */
+.entypo.archive:before { content: '\e864'; } /* 'î¡¤' */
+.entypo.folder:before { content: '\e865'; } /* 'î¡¥' */
+.entypo.light-down:before { content: '\e866'; } /* 'î¡¦' */
+.entypo.light-up:before { content: '\e867'; } /* 'î¡§' */
+.entypo.adjust:before { content: '\e868'; } /* 'î¡¨' */
+.entypo.block:before { content: '\e869'; } /* 'î¡©' */
+.entypo.resize-full:before { content: '\e86a'; } /* 'î¡ª' */
+.entypo.resize-small:before { content: '\e86b'; } /* 'î¡«' */
+.entypo.popup:before { content: '\e86c'; } /* 'î¡¬' */
+.entypo.publish:before { content: '\e86d'; } /* 'î¡­' */
+.entypo.window:before { content: '\e86e'; } /* 'î¡®' */
+.entypo.arrow-combo:before { content: '\e86f'; } /* 'î¡¯' */
+.entypo.down-circled:before { content: '\e870'; } /* 'î¡°' */
+.entypo.right-circled:before { content: '\e871'; } /* 'î¡±' */
+.entypo.up-circled:before { content: '\e872'; } /* 'î¡²' */
+.entypo.down-open:before { content: '\e873'; } /* 'î¡³' */
+.entypo.left-open:before { content: '\e874'; } /* 'î¡´' */
+.entypo.up-open:before { content: '\e875'; } /* 'î¡µ' */
+.entypo.down-open-mini:before { content: '\e876'; } /* 'î¡¶' */
+.entypo.right-open:before { content: '\e877'; } /* 'î¡·' */
+.entypo.down-thin:before { content: '\e878'; } /* 'î¡¸' */
+.entypo.up-bold:before { content: '\e879'; } /* 'î¡¹' */
+.entypo.right-bold:before { content: '\e87a'; } /* 'î¡º' */
+.entypo.left-bold:before { content: '\e87b'; } /* 'î¡»' */
+.entypo.down-bold:before { content: '\e87c'; } /* 'î¡¼' */
+.entypo.up-dir:before { content: '\e87d'; } /* 'î¡½' */
+.entypo.right-dir:before { content: '\e87e'; } /* 'î¡¾' */
+.entypo.left-dir:before { content: '\e87f'; } /* 'î¡¿' */
+.entypo.down-dir:before { content: '\e880'; } /* 'î¢€' */
+.entypo.up:before { content: '\e881'; } /* 'î¢' */
+.entypo.right:before { content: '\e882'; } /* 'î¢‚' */
+.entypo.left:before { content: '\e883'; } /* 'î¢ƒ' */
+.entypo.down:before { content: '\e884'; } /* 'î¢„' */
+.entypo.left-thin:before { content: '\e885'; } /* 'î¢…' */
+.entypo.right-thin:before { content: '\e886'; } /* 'î¢†' */
+.entypo.up-thin:before { content: '\e887'; } /* 'î¢‡' */
+.entypo.ccw:before { content: '\e888'; } /* 'î¢ˆ' */
+.entypo.cw:before { content: '\e889'; } /* 'î¢‰' */
+.entypo.arrows-ccw:before { content: '\e88a'; } /* 'î¢Š' */
+.entypo.level-down:before { content: '\e88b'; } /* 'î¢‹' */
+.entypo.level-up:before { content: '\e88c'; } /* 'î¢Œ' */
+.entypo.shuffle:before { content: '\e88d'; } /* 'î¢' */
+.entypo.loop:before { content: '\e88e'; } /* 'î¢Ž' */
+.entypo.switch:before { content: '\e88f'; } /* 'î¢' */
+.entypo.play:before { content: '\e890'; } /* 'î¢' */
+.entypo.pause:before { content: '\e891'; } /* 'î¢‘' */
+.entypo.record:before { content: '\e892'; } /* 'î¢’' */
+.entypo.stop:before { content: '\e893'; } /* 'î¢“' */
+.entypo.to-end:before { content: '\e894'; } /* 'î¢”' */
+.entypo.fast-forward:before { content: '\e895'; } /* 'î¢•' */
+.entypo.progress-0:before { content: '\e896'; } /* 'î¢–' */
+.entypo.db-shape:before { content: '\e897'; } /* 'î¢—' */
+.entypo.sweden:before { content: '\e898'; } /* 'î¢˜' */
+.entypo.smashing:before { content: '\e899'; } /* 'î¢™' */
+.entypo.logo-db:before { content: '\e89a'; } /* 'î¢š' */
+.entypo.spotify-circled:before { content: '\e89b'; } /* 'î¢›' */
+.entypo.spotify:before { content: '\e89c'; } /* 'î¢œ' */
+.entypo.rdio-circled:before { content: '\e89d'; } /* 'î¢' */
+.entypo.rdio:before { content: '\e89e'; } /* 'î¢ž' */
+.entypo.qq:before { content: '\e89f'; } /* 'î¢Ÿ' */
+.entypo.instagram:before { content: '\e8a0'; } /* 'î¢ ' */
+.entypo.dropbox:before { content: '\e8a1'; } /* 'î¢¡' */
+.entypo.evernote:before { content: '\e8a2'; } /* 'î¢¢' */
+.entypo.flattr:before { content: '\e8a3'; } /* 'î¢£' */
+.entypo.skype:before { content: '\e8a4'; } /* 'î¢¤' */
+.entypo.skype-circled:before { content: '\e8a5'; } /* 'î¢¥' */
+.entypo.renren:before { content: '\e8a6'; } /* 'î¢¦' */
+.entypo.sina-weibo:before { content: '\e8a7'; } /* 'î¢§' */
+.entypo.paypal:before { content: '\e8a8'; } /* 'î¢¨' */
+.entypo.picasa:before { content: '\e8a9'; } /* 'î¢©' */
+.entypo.mixi:before { content: '\e8aa'; } /* 'î¢ª' */
+.entypo.behance:before { content: '\e8ab'; } /* 'î¢«' */
+.entypo.soundcloud:before { content: '\e8ac'; } /* 'î¢¬' */
+.entypo.google-circles:before { content: '\e8ad'; } /* 'î¢­' */
+.entypo.vkontakte:before { content: '\e8ae'; } /* 'î¢®' */
+.entypo.lastfm-circled:before { content: '\e8af'; } /* 'î¢¯' */
+.entypo.lastfm:before { content: '\e8b0'; } /* 'î¢°' */
+.entypo.stumbleupon-circled:before { content: '\e8b1'; } /* 'î¢±' */
+.entypo.stumbleupon:before { content: '\e8b2'; } /* 'î¢²' */
+.entypo.dribbble-circled:before { content: '\e8b3'; } /* 'î¢³' */
+.entypo.dribbble:before { content: '\e8b4'; } /* 'î¢´' */
+.entypo.linkedin-circled:before { content: '\e8b5'; } /* 'î¢µ' */
+.entypo.linkedin:before { content: '\e8b6'; } /* 'î¢¶' */
+.entypo.tumblr-circled:before { content: '\e8b7'; } /* 'î¢·' */
+.entypo.tumblr:before { content: '\e8b8'; } /* 'î¢¸' */
+.entypo.pinterest-circled:before { content: '\e8b9'; } /* 'î¢¹' */
+.entypo.pinterest:before { content: '\e8ba'; } /* 'î¢º' */
+.entypo.gplus-circled:before { content: '\e8bb'; } /* 'î¢»' */
+.entypo.gplus:before { content: '\e8bc'; } /* 'î¢¼' */
+.entypo.facebook-squared:before { content: '\e8bd'; } /* 'î¢½' */
+.entypo.facebook-circled:before { content: '\e8be'; } /* 'î¢¾' */
+.entypo.facebook:before { content: '\e8bf'; } /* 'î¢¿' */
+.entypo.twitter-circled:before { content: '\e8c0'; } /* 'î£€' */
+.entypo.twitter:before { content: '\e8c1'; } /* 'î£' */
+.entypo.vimeo-circled:before { content: '\e8c2'; } /* 'î£‚' */
+.entypo.vimeo:before { content: '\e8c3'; } /* 'î£ƒ' */
+.entypo.flickr-circled:before { content: '\e8c4'; } /* 'î£„' */
+.entypo.flickr:before { content: '\e8c5'; } /* 'î£…' */
+.entypo.github-circled:before { content: '\e8c6'; } /* 'î£†' */
+.entypo.github:before { content: '\e8c7'; } /* 'î£‡' */
+.entypo.cc-remix:before { content: '\e8c8'; } /* 'î£ˆ' */
+.entypo.cc-share:before { content: '\e8c9'; } /* 'î£‰' */
+.entypo.cc-zero:before { content: '\e8ca'; } /* 'î£Š' */
+.entypo.cc-pd:before { content: '\e8cb'; } /* 'î£‹' */
+.entypo.cc-nd:before { content: '\e8cc'; } /* 'î£Œ' */
+.entypo.cc-sa:before { content: '\e8cd'; } /* 'î£' */
+.entypo.cc-nc-jp:before { content: '\e8ce'; } /* 'î£Ž' */
+.entypo.cc-nc-eu:before { content: '\e8cf'; } /* 'î£' */
+.entypo.cc-nc:before { content: '\e8d0'; } /* 'î£' */
+.entypo.cc-by:before { content: '\e8d1'; } /* 'î£‘' */
+.entypo.cc:before { content: '\e8d2'; } /* 'î£’' */
+.entypo.traffic-cone:before { content: '\e8d3'; } /* 'î£“' */
+.entypo.gauge:before { content: '\e8d4'; } /* 'î£”' */
+.entypo.rocket:before { content: '\e8d5'; } /* 'î£•' */
+.entypo.flow-parallel:before { content: '\e8d6'; } /* 'î£–' */
+.entypo.tape:before { content: '\e8d7'; } /* 'î£—' */
+.entypo.graduation-cap:before { content: '\e8d8'; } /* 'î£˜' */
+.entypo.language:before { content: '\e8d9'; } /* 'î£™' */
+.entypo.ticket:before { content: '\e8da'; } /* 'î£š' */
+.entypo.water:before { content: '\e8db'; } /* 'î£›' */
+.entypo.droplet:before { content: '\e8dc'; } /* 'î£œ' */
+.entypo.air:before { content: '\e8dd'; } /* 'î£' */
+.entypo.credit-card:before { content: '\e8de'; } /* 'î£ž' */
+.entypo.floppy:before { content: '\e8df'; } /* 'î£Ÿ' */
+.entypo.clipboard:before { content: '\e8e0'; } /* 'î£ ' */
+.entypo.megaphone:before { content: '\e8e1'; } /* 'î£¡' */
+.entypo.database:before { content: '\e8e2'; } /* 'î£¢' */
+.entypo.drive:before { content: '\e8e3'; } /* 'î££' */
+.entypo.bucket:before { content: '\e8e4'; } /* 'î£¤' */
+.entypo.thermometer:before { content: '\e8e5'; } /* 'î£¥' */
+.entypo.key:before { content: '\e8e6'; } /* 'î£¦' */
+.entypo.flow-cascade:before { content: '\e8e7'; } /* 'î£§' */
+.entypo.flow-branch:before { content: '\e8e8'; } /* 'î£¨' */
+.entypo.flow-tree:before { content: '\e8e9'; } /* 'î£©' */
+.entypo.flow-line:before { content: '\e8ea'; } /* 'î£ª' */
+.entypo.chart-area:before { content: '\e8eb'; } /* 'î£«' */
+.entypo.cloud:before { content: '\e8ec'; } /* 'î£¬' */
+.entypo.chart-bar:before { content: '\e8ed'; } /* 'î£­' */
+.entypo.chart-line:before { content: '\e8ee'; } /* 'î£®' */
+.entypo.globe:before { content: '\e8ef'; } /* 'î£¯' */
+.entypo.install:before { content: '\e8f0'; } /* 'î£°' */
+.entypo.chart-pie:before { content: '\e8f1'; } /* 'î£±' */
+.entypo.erase:before { content: '\e8f2'; } /* 'î£²' */
+.entypo.inbox:before { content: '\e8f3'; } /* 'î£³' */
+.entypo.cd:before { content: '\e8f4'; } /* 'î£´' */
+.entypo.infinity:before { content: '\e8f5'; } /* 'î£µ' */
+.entypo.magnet:before { content: '\e8f6'; } /* 'î£¶' */
+.entypo.network:before { content: '\e8f7'; } /* 'î£·' */
+.entypo.mobile:before { content: '\e8f8'; } /* 'î£¸' */
+.entypo.brush:before { content: '\e8f9'; } /* 'î£¹' */
+.entypo.dot-3:before { content: '\e8fa'; } /* 'î£º' */
+.entypo.monitor:before { content: '\e8fb'; } /* 'î£»' */
+.entypo.back-in-time:before { content: '\e8fc'; } /* 'î£¼' */
+.entypo.dot-2:before { content: '\e8fd'; } /* 'î£½' */
+.entypo.dot:before { content: '\e8fe'; } /* 'î£¾' */
+.entypo.battery:before { content: '\e8ff'; } /* 'î£¿' */
+.entypo.trophy:before { content: '\e900'; } /* 'î¤€' */
+.entypo.suitcase:before { content: '\e901'; } /* 'î¤' */
+.entypo.briefcase:before { content: '\e902'; } /* 'î¤‚' */
+.entypo.signal:before { content: '\e903'; } /* 'î¤ƒ' */
+.entypo.list-add:before { content: '\e904'; } /* 'î¤„' */
+.entypo.mouse:before { content: '\e905'; } /* 'î¤…' */
+.entypo.lifebuoy:before { content: '\e906'; } /* 'î¤†' */
+.entypo.list:before { content: '\e907'; } /* 'î¤‡' */
+.entypo.palette:before { content: '\e908'; } /* 'î¤ˆ' */
+.entypo.leaf:before { content: '\e909'; } /* 'î¤‰' */
+.entypo.paper-plane:before { content: '\e90a'; } /* 'î¤Š' */
+.entypo.target:before { content: '\e90b'; } /* 'î¤‹' */
+.entypo.progress-3:before { content: '\e90c'; } /* 'î¤Œ' */
+.entypo.flight:before { content: '\e90d'; } /* 'î¤' */
+.entypo.moon:before { content: '\e90e'; } /* 'î¤Ž' */
+.entypo.progress-2:before { content: '\e90f'; } /* 'î¤' */
+.entypo.progress-1:before { content: '\e910'; } /* 'î¤' */
+.entypo.flash:before { content: '\e911'; } /* 'î¤‘' */
+.entypo.to-start:before { content: '\e912'; } /* 'î¤’' */
+.entypo.fast-backward:before { content: '\e913'; } /* 'î¤“' */
+.entypo.note:before { content: '\e914'; } /* 'î¤”' */
+.entypo.note-beamed:before { content: '\e915'; } /* 'î¤•' */
+.entypo.music:before { content: '\e916'; } /* 'î¤–' */
+.entypo.flashlight:before { content: '\e917'; } /* 'î¤—' */
+.entypo.doc-landscape:before { content: '\e918'; } /* 'î¤˜' */
+.entypo.doc-text:before { content: '\e919'; } /* 'î¤™' */
+.entypo.left-circled:before { content: '\e91a'; } /* 'î¤š' */
+
+.entypo.shape-bubble:before { content: '\e91b'; } /* 'î¤›' */
+.entypo.shape-badge-ribbon:before { content: '\e921'; } /* 'î¤¡' */
+.entypo.shape-burst-8:before { content: '\e923'; } /* 'î¤£' */
+.entypo.shape-burst-12:before { content: '\e924'; } /* 'î¤¤' */
+.entypo.shape-circle:before { content: '\e925'; } /* 'î¤¥' */
+.entypo.shape-diamond:before { content: '\e926'; } /* 'î¤¦' */
+.entypo.shape-heart:before { content: '\e927'; } /* 'î¤§' */
+.entypo.shape-hexagon:before { content: '\e928'; } /* 'î¤¨' */
+.entypo.shape-octagon:before { content: '\e929'; } /* 'î¤©' */
+
