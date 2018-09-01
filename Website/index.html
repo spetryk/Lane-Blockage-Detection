@@ -155,7 +155,7 @@
               <img alt="example lane blockage" style="padding: 0 15px;float:right;width:120px;height:350px;margin: 0 15px;" src="/img/laneBlockageExample.png">
               <p style="margin-top: 20px;"> </p>
               <b>What's a lane blockage?</b><br>
-              In a lane blockage, cars attempting to make a turn cannot approach the intersection due to congestion from a different traffic movement. Thus, even though the turn light is green, little to no cars can actually make the turn. If traffic signal plans do not take these into account, they will wrongly assume a lower level of congestion.
+              In a lane blockage, some cars may not approach the intersection due to congestion from a different traffic movement, even if the light is green for their direction. If traffic signal plans do not take these into account, they will wrongly assume a lower level of congestion.
               <br><br>
 
               A lane blockage is illustrated in the image to the right: the red cars are attempting to turn left, yet are blocked by congestion from the through and right turn movements.
@@ -164,7 +164,7 @@
               <img alt="example lane blockage" style="padding: 0 15px;float:right;width:120px;height:350px;margin: 0 15px;" src="/img/queueSpillbackExample.png">
               <p style="margin-top: 20px;"> </p>
                 <b>What's queue spillback?</b><br>
-              Queue spillback occurs when there is a green light, yet upstream cars cannot even enter the intersection due to congestion immediately downstream.<br><br>
+              Queue spillback occurs when there is a green light, yet upstream cars cannot enter the intersection due to congestion immediately downstream.<br><br>
                 This is illustrated in the image to the right. The cars going straight through the intersection must wait to enter (despite their green light) due to the blockage right after.
             </div>
           </div>
@@ -178,8 +178,9 @@
         <br>
         <p class="lead">Visualization</p>
         <h4 class="bkgText">
-          Information about visualization
+          Click on a tab below to view the detection in action. The purple sections on the roads indicate loop detectors. The conclusions appearing on the right are estimations of the traffic scenario displayed in the video. You may observe the accuracy of the algorithm by comparing the real traffic scenario with the estimations generated from loop detector data.
         </h4>
+        <br><br>
       </div>
 
       <div class="visualization">
@@ -190,7 +191,6 @@
         </div>
 
         <div id="LTB" class="tabcontent">
-          <h4> this is the left turn blockage</h4>
           <div class="col-container">
             <div class="col">
               <video id="LTB" class="video-js positioning" controls preload="auto" width="600" height="337.5" data-setup="{}">
@@ -206,7 +206,6 @@
         </div>
 
         <div id="TQSB" class="tabcontent">
-          <h4> this is the through QSB</h4>
           <div class="col-container">
             <div class="col">
               <video id="TQSB" class="video-js positioning" controls preload="auto" width="600" height="337.5" data-setup="{}">
@@ -222,7 +221,6 @@
         </div>
 
         <div id="UC" class="tabcontent">
-          <h3> this is uncongested</h3>
           <div class="col-container">
             <div class="col">
               <video id="UC" class="video-js positioning" controls preload="auto" width="600" height="337.5" data-setup="{}">
