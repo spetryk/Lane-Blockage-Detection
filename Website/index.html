@@ -122,7 +122,6 @@
     <header id="site-header" class="subbrand light">
       <div class="navbar navbar-default navbar-static-top yamm">
         <div class="container"> <a href="http://berkeley.edu" class="home-link">UC Berkeley</a>
-          <!-- Brand and toggle get grouped for better mobile display -->
           <div class="navbar-header one-line"><br>
             <h1><img src="/img/berkeleyLogoCropped4.png" alt="Berkeley Logo" style="width:225px;height:80px;"><span class="dept-title one-line" style="font-size:45px">California PATH</span></h1>
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-nav"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
@@ -148,9 +147,7 @@
           The widely used Highway Capacity Manual published by the Transportation Research Board provides metrics for determining the traffic delay and level of service (LOS) at signalized intersections. However, the calculations of delay and LOS do not take into account interactions between traffic movements or queue spillback from the downstream. The occurrence of lane blockages or queue spillback can severely diminish accuracy of the delay and LOS estimates.
           <br><br>
 
-
           <div class="row">
-
             <div class="column">
               <img alt="example lane blockage" style="padding: 0 15px;float:right;width:120px;height:350px;margin: 0 15px;" src="/img/laneBlockageExample.png">
               <p style="margin-top: 20px;"> </p>
@@ -168,9 +165,7 @@
                 This is illustrated in the image to the right. The cars going straight through the intersection must wait to enter (despite their green light) due to the blockage right after.
             </div>
           </div>
-
           <br>
-
 
           This study combines data from loop detectors and the road geometry to categorize the current traffic condition. It is able to discern the percentage congestion, as well as the presence of a lane blockage or queue spillback. The proposed method is also able to flag which traffic movements (left, through, or right) are contributing to congestion.
 
@@ -343,8 +338,6 @@
        var svg = d3.select("#svg" + caseName).append("svg").attr("height", 500).attr("width", 600).attr("class", "svgElem positioning");
        var width = Number(svg.attr('width'));
        var height = Number(svg.attr('height'));
-       /* svg.append('rect').attr('width', width).attr('height', height).attr('stroke', 'black')
-        *    .attr('stroke-width', 2).attr('fill', 'transparent');*/
 
        /* Blocks colored by congested turn*/
        var blockWidthLeft  = 100;
@@ -700,9 +693,6 @@
        newCase(caseName);
 
      }
-
-     // Get the element with id="defaultOpen" and click on it
-     //document.getElementById("defaultOpen").click();
 
     </script>
 
