@@ -8,7 +8,7 @@
     <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
     <title>Lane Blockage Detection</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="css/styles.css?version=30">
+    <link rel="stylesheet" href="css/styles.css?version=32">
     <link href="https://vjs.zencdn.net/7.0.3/video-js.css" rel="stylesheet">
     <script src="https://vjs.zencdn.net/7.0.3/video.js"></script>
     <!-- Fonts -->
@@ -142,14 +142,38 @@
         <p class="lead"> Background</p>
         <h4 class="bkgText">
           This work extends from research under the <a href="https://path.berkeley.edu/"><u>California Partners for Advanced Transportation
-          Technology</u></a> in addition to <a href="http://bayen.eecs.berkeley.edu/"><u>Prof. Alexandre Bayen's</u></a> lab at UC Berkeley.
-          <br><br>
+          Technology</u></a> in addition to <a href="http://bayen.eecs.berkeley.edu/"><u>Prof. Alexandre Bayen's</u></a> lab at UC Berkeley. All traffic simulations were produced using the microsimulation traffic modeling software <a href="https://www.aimsun.com/"><u>Aimsun</u></a>.
+          <br><br><br>
+          <b>What's the problem?</b><br>
           The widely used Highway Capacity Manual published by the Transportation Research Board provides metrics for determining the traffic delay and level of service (LOS) at signalized intersections. However, the calculations of delay and LOS do not take into account interactions between traffic movements or queue spillback from the downstream. The occurrence of lane blockages or queue spillback can severely diminish accuracy of the delay and LOS estimates.
           <br><br>
 
-          The study combines data from loop detectors and the road geometry to categorize the current traffic condition. However, it goes beyond the simple indication of congestion: it can also predict the formation of a lane blockage. In this scenario, cars attempting to make a turn cannot approach the intersection due to congestion from a different traffic movement. Thus, even though the turn light is green, little to no cars can actually make the turn. If traffic signal plans do not take these into account, they will wrongly assume a lower level of congestion.
 
-A lane blockage is illustrated in the image below: the red cars are attempting to turn left, yet are blocked by congestion from the through and right turn movements.
+          <div class="row">
+
+            <div class="column">
+              <img alt="example lane blockage" style="padding: 0 15px;float:right;width:120px;height:350px;margin: 0 15px;" src="/img/laneBlockageExample.png">
+              <p style="margin-top: 20px;"> </p>
+              <b>What's a lane blockage?</b><br>
+              In a lane blockage, cars attempting to make a turn cannot approach the intersection due to congestion from a different traffic movement. Thus, even though the turn light is green, little to no cars can actually make the turn. If traffic signal plans do not take these into account, they will wrongly assume a lower level of congestion.
+              <br><br>
+
+              A lane blockage is illustrated in the image to the right: the red cars are attempting to turn left, yet are blocked by congestion from the through and right turn movements.
+            </div>
+            <div class="column">
+              <img alt="example lane blockage" style="padding: 0 15px;float:right;width:120px;height:350px;margin: 0 15px;" src="/img/queueSpillbackExample.png">
+              <p style="margin-top: 20px;"> </p>
+                <b>What's queue spillback?</b><br>
+              Queue spillback occurs when there is a green light, yet upstream cars cannot even enter the intersection due to congestion immediately downstream.<br><br>
+                This is illustrated in the image to the right. The cars going straight through the intersection must wait to enter (despite their green light) due to the blockage right after.
+            </div>
+          </div>
+
+          <br>
+
+
+          This study combines data from loop detectors and the road geometry to categorize the current traffic condition. It is able to discern the percentage congestion, as well as the presence of a lane blockage or queue spillback. The proposed method is also able to flag which traffic movements (left, through, or right) are contributing to congestion.
+
         </h4>
         <br>
         <p class="lead">Visualization</p>

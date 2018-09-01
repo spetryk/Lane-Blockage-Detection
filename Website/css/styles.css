@@ -13,6 +13,29 @@
     min-width: 1400px;
 }
 
+.bkgTextDiv {
+    width: 90%;
+    margin: 0 auto;
+}
+
+
+.column {
+    float: left;
+    width: 50%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.visualization {
+    width: 90%;
+    margin: 0 auto;
+}
+
 .header-bar {
     background-color: #B9D3B6;
 }
@@ -21,17 +44,14 @@
     background-color: white;
 }
 
-.bkgTextDiv {
-    width: 90%;
-    margin: 0 auto;
-}
 
 .bkgText {
    line-height: 25px;
 }
 
-.visualization {
-    width: 90%;
+.bkgTextDiv {
+    text-align: justify;
+    width: 70%;
     margin: 0 auto;
 }
 
